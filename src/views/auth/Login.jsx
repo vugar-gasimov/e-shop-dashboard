@@ -1,8 +1,24 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 
 const Login = () => {
+  const [state, setState] = useState({
+    email: '',
+    password: '',
+  });
+
+  const inputHandler = (e) => {
+    setState({
+      ...state,
+      [e.target.email]: e.target.value,
+    });
+  };
+
+  const submit = (e) => {
+    e.preventDefault();
+  };
+
   return (
     <div className=' min-w-screen min-h-screen bg-[#cdcae9] flex justify-center items-center'>
       <div className='w-[350px] text-[#fff] p-2 '>
@@ -13,7 +29,7 @@ const Login = () => {
           <p className='text-sm mb-3 font-medium text-gray-200 text-center'>
             Please enter your login details.
           </p>
-          <form className=''>
+          <form onSubmit={submit}>
             <div className='flex flex-col w-full gap-1 mb-2'>
               <label
                 className='block text-gray-300 text-sm font-bold mb-1'
@@ -22,6 +38,8 @@ const Login = () => {
                 Email Address
               </label>
               <input
+                onChange={inputHandler}
+                value={state.email}
                 className='shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline border-slate-400 bg-transparent'
                 type='email'
                 name='email'
@@ -38,6 +56,8 @@ const Login = () => {
                 Password
               </label>
               <input
+                onChange={inputHandler}
+                value={state.password}
                 className='shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline border-slate-400 bg-transparent'
                 type='password'
                 name='password'
@@ -50,9 +70,9 @@ const Login = () => {
             <div className='flex items-center justify-between'>
               <button
                 className='bg-slate-800 w-full hover:bg-slate-600 hover:shadow-lg text-white hover:text-slate-100 font-bold py-2 px-7 mb-3 rounded-md focus:outline-none focus:shadow-outline'
-                type='button'
+                type='submit'
               >
-                Register
+                Login
               </button>
             </div>
             <div className='flex items-center mb-2 gap-3 justify-center'>
