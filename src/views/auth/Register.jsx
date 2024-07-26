@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { FaFacebook, FaGoogle } from 'react-icons/fa';
 
 const Register = () => {
   return (
@@ -13,7 +14,7 @@ const Register = () => {
             Please fill in the information below to create your account.
           </p>
           <form className=''>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-2'>
               <label
                 className='block text-gray-300 text-sm font-bold mb-1'
                 htmlFor='name'
@@ -29,12 +30,12 @@ const Register = () => {
                 required
               />
             </div>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-2'>
               <label
                 className='block text-gray-300 text-sm font-bold mb-1'
                 htmlFor='email'
               >
-                Email
+                Email Address
               </label>
               <input
                 className='shadow appearance-none border rounded-md w-full py-2 px-3 text-gray-300 leading-tight focus:outline-none focus:shadow-outline border-slate-400 bg-transparent'
@@ -45,7 +46,7 @@ const Register = () => {
                 required
               />
             </div>
-            <div className='flex flex-col w-full gap-1 mb-3'>
+            <div className='flex flex-col w-full gap-1 mb-2'>
               <label
                 className='block text-gray-300 text-sm font-bold mb-1'
                 htmlFor='password'
@@ -61,7 +62,7 @@ const Register = () => {
                 required
               />
             </div>
-            <div className='flex items-center w-full gap-3 mb-3'>
+            <div className='flex items-center w-full gap-3 mb-2'>
               <input
                 className='w-4 h-4 text-blue-600 overflow-hidden bg-gray-200 rounded border-gray-300 focus:ring-blue-500'
                 type='checkbox'
@@ -83,7 +84,7 @@ const Register = () => {
                 Register
               </button>
             </div>
-            <div className='flex items-center mb-3 gap-3 justify-center'>
+            <div className='flex items-center mb-2 gap-3 justify-center'>
               <p className='text-center text-gray-200'>
                 Already have an account?{' '}
                 <Link to='/login' className='text-blue-300 hover:underline'>
@@ -91,15 +92,25 @@ const Register = () => {
                 </Link>
               </p>
             </div>
-            <div className='w-full flex justify-center items-center mb-3'>
+            <div className='w-full flex justify-center items-center mb-2'>
               <div className='w-[45%] h-1 bg-slate-700 rounded'></div>
               <div className='w-[10%] flex justify-center items-center'>
                 <span className='pb-1'>Or</span>
               </div>
               <div className='w-[45%] h-1 bg-slate-700 rounded'></div>
             </div>
+
             <div className='flex justify-center items-center gap-3'>
-              <div className='w-[135px] h-[35px] flex rounded-md bg-orange-300 shadow-lg hover:shadow-orange-200 justify-center cursor-pointer items-center overflow-hidden'></div>
+              <div className='w-[135px] h-[35px] flex rounded-md bg-orange-700 shadow-lg hover:shadow-orange-700/50 justify-center cursor-pointer items-center overflow-hidden'>
+                <span className=''>
+                  <FaGoogle />
+                </span>
+              </div>
+              <div className='w-[135px] h-[35px] flex rounded-md bg-blue-700 shadow-lg hover:shadow-blue-700/50 justify-center cursor-pointer items-center overflow-hidden'>
+                <span className=''>
+                  <FaFacebook />
+                </span>
+              </div>
             </div>
           </form>
         </div>
