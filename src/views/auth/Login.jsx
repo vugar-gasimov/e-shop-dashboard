@@ -11,7 +11,7 @@ const Login = () => {
   const inputHandler = (e) => {
     setState({
       ...state,
-      [e.target.email]: e.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
