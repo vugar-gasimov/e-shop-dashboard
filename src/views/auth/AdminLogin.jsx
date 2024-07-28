@@ -19,7 +19,7 @@ const AdminLogin = () => {
 
   const submit = (e) => {
     e.preventDefault();
-    dispatch(admin_login);
+    dispatch(admin_login(state));
   };
 
   return (
