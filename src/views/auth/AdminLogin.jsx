@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { admin_login } from '../../store/Reducers/authReducer';
+import { PropagateLoader } from 'react-spinners';
 
 const AdminLogin = () => {
   const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.auth);
 
   const [state, setState] = useState({
     email: '',
@@ -20,6 +22,14 @@ const AdminLogin = () => {
   const submit = (e) => {
     e.preventDefault();
     dispatch(admin_login(state));
+  };
+
+  const overrideStyle = {
+    display: 'flex',
+    margin: '0 auto',
+    height: '24px',
+    justifyContent: 'center',
+    alignItems: 'center',
   };
 
   return (
@@ -78,10 +88,18 @@ const AdminLogin = () => {
 
             <div className='flex items-center justify-between'>
               <button
+                disabled={loader ? true : false}
                 className='bg-slate-800 w-full hover:bg-slate-600 hover:shadow-lg text-white hover:text-slate-100 font-bold py-2 px-7 mb-3 rounded-md focus:outline-none focus:shadow-outline'
                 type='submit'
               >
-                Login
+                {loader ? (
+                  <PropagateLoader
+                    color='#D1D5DB'
+                    cssOverride={overrideStyle}
+                  />
+                ) : (
+                  'Login'
+                )}
               </button>
             </div>
 
