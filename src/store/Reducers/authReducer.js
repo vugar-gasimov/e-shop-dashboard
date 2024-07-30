@@ -38,17 +38,17 @@ export const authReducer = createSlice({
     builder
       .addCase(admin_login.pending, (state, { payload }) => {
         state.loader = true;
-        state.successMessage = '';
-        state.errorMessage = '';
+        // state.successMessage = '';
+        // state.errorMessage = '';
       })
-      // .addCase(admin_login.fulfilled, (state, action) => {
-      //   state.loader = false;
-      //   state.userInfo = action.payload.user;
-      //   state.successMessage = 'Login successful!';
-      // })
       .addCase(admin_login.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error || 'Login failed.';
+      })
+      .addCase(admin_login.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message || 'Login successful!';
+        state.userInfo = payload.user;
       });
   },
 });
