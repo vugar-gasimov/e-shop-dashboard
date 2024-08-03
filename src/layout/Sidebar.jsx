@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getNav } from '../navigation/index';
+import { MdExitToApp, MdOutlineList } from 'react-icons/md';
+const LOGOUT_ICON = <MdExitToApp />;
 
-const Sidebar = () => {
+const Sidebar = ({ showSidebar, setShowSidebar }) => {
   const { pathname } = useLocation();
 
   const [allNav, setAllNav] = useState([]);
@@ -13,10 +15,25 @@ const Sidebar = () => {
   console.log(allNav);
   return (
     <div>
-      <div></div>
       <div
-        className={`w-[260px] fixed bg-[#e6e7fb] z-50 top-0 h-screen shadow-[0_0_15px_0_rgb(34_41_47_/_5%)] transition-all`}
+        className={`flex duration-200 ${
+          !showSidebar ? 'invisible' : 'visible'
+        } w-screen h-screen bg-[#8cbce780] top-0 left-0 z-10`}
+        onClick={setShowSidebar(false)}
+      ></div>
+      <div
+        className={`w-[260px] fixed bg-[#e6e7fb] z-50 top-0 h-screen shadow-[0_0_15px_0_rgb(34_41_47_/_5%)] transition-all ${
+          showSidebar ? 'left-0' : ' lg:left-0'
+        }`}
       >
+        <div
+          className='w-[35px] flex '
+          onClick={() => setShowSidebar(!showSidebar)}
+        >
+          <span>
+            <MdOutlineList />
+          </span>
+        </div>
         <div className='h-[70px] flex justify-center items-center'>
           <Link className='w-[180px] h-[50px]' to='/'>
             <img
@@ -43,6 +60,16 @@ const Sidebar = () => {
                 </Link>
               </li>
             ))}
+            <li>
+              <button
+                className='text-[#030811] font-bold duration-200
+                   px-[12px] py-[9px] rounded-lg flex justify-start items-center gap-[12px] hover:pl-4 transition-all w-full mb-1'
+                type='button'
+              >
+                <span>{LOGOUT_ICON}</span>
+                <span>Logout</span>
+              </button>
+            </li>
           </ul>
         </div>
       </div>
