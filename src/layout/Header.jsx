@@ -23,6 +23,21 @@ const Header = ({ showSidebar, setShowSidebar }) => {
             placeholder='Search...'
           />
         </div>
+        <div className='flex justify-center items-center gap-8 relative'>
+          <div className='flex justify-center items-center'>
+            <div className='flex justify-center items-center gap-3'>
+              <div className='flex justify-center items-center flex-col text-end'>
+                <h2 className='text-md font-bold'>Vugar Gasimov</h2>
+                <span className='text-[14px] w-full font-normal'>Admin</span>
+              </div>
+              <img
+                className='w-[45px] h-[45px] rounded-full overflow-hidden'
+                src='http://localhost:3000/images/admin.jpg'
+                alt='User profile image.'
+              />
+            </div>
+          </div>
+        </div>
       </dev>
     </div>
   );
