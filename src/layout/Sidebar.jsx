@@ -16,25 +16,26 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
   return (
     <div>
       <div
-        className={`flex duration-200 ${
+        className={`fixed duration-200 ${
           !showSidebar ? 'invisible' : 'visible'
         } w-screen h-screen bg-[#8cbce780] top-0 left-0 z-10`}
         onClick={() => setShowSidebar(false)}
       ></div>
       <div
-        className={`w-[260px] fixed bg-[#e6e7fb] z-50 top-0 h-screen shadow-[0_0_15px_0_rgb(34_41_47_/_5%)] transition-all ${
-          showSidebar ? 'left-0' : '  lg:left-260 '
+        className={`py-5 w-[270px] fixed bg-[#e6e7fb] z-50 top-0 h-screen shadow-[0_0_15px_0_rgb(34_41_47_/_5%)] transition-all ${
+          showSidebar ? 'left-0' : '-left-[270px] lg:left-0'
         }`}
       >
-        <div
-          className='w-[35px] flex '
-          onClick={() => setShowSidebar(!showSidebar)}
-        >
-          <span>
-            <MdOutlineList />
-          </span>
-        </div>
-        <div className='h-[70px] flex justify-center items-center'>
+        <div className='h-[70px] flex justify-center items-center gap-2'>
+          {' '}
+          <div
+            className='w-[35px] flex lg:hidden h-[35px] rounded-sm bg-indigo-500 shadow-lg hover:shadow-indigo-500/50 justify-center items-center cursor-pointer'
+            onClick={() => setShowSidebar(!showSidebar)}
+          >
+            <span>
+              <MdOutlineList />
+            </span>
+          </div>
           <Link className='w-[180px] h-[50px]' to='/'>
             <img
               className='w-full h-full'
