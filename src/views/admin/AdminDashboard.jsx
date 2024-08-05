@@ -280,7 +280,7 @@ const AdminDashboard = () => {
                     Pending
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    View
+                    <Link>View</Link>
                   </td>
                 </tr>
               ))}
