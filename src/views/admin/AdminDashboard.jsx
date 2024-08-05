@@ -4,8 +4,66 @@ import {
   MdOutlineProductionQuantityLimits,
 } from 'react-icons/md';
 import { FaUsers, FaCartShopping } from 'react-icons/fa6';
+import Chart from 'react-apexcharts';
 
 const AdminDashboard = () => {
+  const state = {
+    series: [
+      {
+        name: 'Orders',
+        data: [53, 38, 74, 45, 55, 97, 45, 52, 56, 37, 97, 34],
+      },
+      {
+        name: 'Revenue',
+        data: [64, 53, 23, 34, 54, 46, 54, 65, 85, 92, 25, 58],
+      },
+      {
+        name: 'Vendors',
+        data: [94, 46, 73, 34, 54, 38, 74, 65, 86, 79, 35, 58],
+      },
+    ],
+    options: {
+      color: ['#181ee8', '#181ee8'],
+      plotOptions: {
+        radius: 30,
+      },
+      chart: {
+        background: 'transparent',
+        foreColor: '#d0d2d6',
+      },
+      dataLabels: {
+        enabled: false,
+      },
+      strock: {
+        show: true,
+        curve: ['smooth', 'straight', 'stepline'],
+        lineCap: 'butt',
+        colors: '#f0f0f0',
+        width: 0.5,
+        dashArray: 0,
+      },
+      xaxis: {
+        categories: [
+          'Jan',
+          'Feb',
+          'Mar',
+          'Apl',
+          'May',
+          'Jun',
+          'Jul',
+          'Aug',
+          'Sep',
+          'Oct',
+          'Nov',
+          'Dec',
+        ],
+      },
+      legend: {
+        position: 'top',
+      },
+    },
+  };
+
   return (
     <div className='px-2 md:px-7 py-5'>
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
@@ -46,6 +104,18 @@ const AdminDashboard = () => {
           </div>{' '}
           <div className='w-[40px] h-[47px] rounded-full bg-[#0200f8] flex justify-center items-center text-xl'>
             <FaCartShopping className='text-[#fae8e8] shadow-lg' />
+          </div>
+        </div>
+      </div>
+      <div className='w-full flex flex-wrap mt-7'>
+        <div className='w-full lg:w-7/12 lg:pr-3'>
+          <div className='w-full bg-[#6a5fdf] p-4 rounded-md'>
+            <Chart
+              options={state.options}
+              series={state.series}
+              type='bar'
+              height={350}
+            />
           </div>
         </div>
       </div>
