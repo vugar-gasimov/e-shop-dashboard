@@ -236,6 +236,58 @@ const AdminDashboard = () => {
           </div>
         </div>
       </div>
+      <div className='w-full p-4 bg-[#6a5fdf] rounded-md mt-6'>
+        <div className='flex justify-between items-center'>
+          <h2 className='font-semibold text-lg text-[#d0d2d6] pb-3'>
+            Recent orders
+          </h2>
+          <Link className='font-semibold text-sm text-[#d0d2d6]'>View all</Link>
+        </div>
+        <div className='relative overflow-x-auto'>
+          <table className='w-full text-sm text-left text-[#d0d2d6]  '>
+            <thead className='text-sm text-[#d0d2d6] uppercase border-b border-slate-700'>
+              <tr className=''>
+                <th scope='col' className='py-3 px-4'>
+                  Order id
+                </th>
+                <th scope='col' className='py-3 px-4'>
+                  Price
+                </th>
+                <th scope='col' className='py-3 px-4'>
+                  Payment status
+                </th>
+                <th scope='col' className='py-3 px-4'>
+                  Order status
+                </th>
+                <th scope='col' className='py-3 px-4'>
+                  Active
+                </th>
+              </tr>
+            </thead>
+            <tbody className=''>
+              {[1, 2, 3, 4, 5].map((d, i) => (
+                <tr key={i} className=''>
+                  <td className='py-3 px-4 font-medium whitespace-nowrap'>
+                    #34344
+                  </td>
+                  <td className='py-3 px-4 font-medium whitespace-nowrap'>
+                    $344
+                  </td>
+                  <td className='py-3 px-4 font-medium whitespace-nowrap'>
+                    Pending
+                  </td>
+                  <td className='py-3 px-4 font-medium whitespace-nowrap'>
+                    Pending
+                  </td>
+                  <td className='py-3 px-4 font-medium whitespace-nowrap'>
+                    View
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   );
 };
