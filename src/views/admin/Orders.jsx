@@ -16,7 +16,7 @@ const Orders = () => {
             onChange={(e) => setPerPage(parseInt(e.target.value))}
             name=''
             id=''
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
           >
             <option value='5' className=''>
               5
@@ -31,7 +31,7 @@ const Orders = () => {
           <input
             type='text'
             placeholder='Search...'
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-[#6a5fdf] border border-slate-700 rounded-md text-[#d0d2d6]'
+            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
           />
         </div>
         <div className='relative mt-5 overflow-x-auto'>
