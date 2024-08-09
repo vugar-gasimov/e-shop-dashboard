@@ -14,6 +14,7 @@ const DeactivateVendor = () => {
   const [show, setShow] = useState(false);
   return (
     <div className='px-2 lg:px-7 pt-5'>
+      <h1 className='text-[20px] font-bold mb-3'>Deactivate Vendor</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
         <div className='flex justify-between items-center'>
           <select
@@ -52,20 +53,15 @@ const DeactivateVendor = () => {
                   Name
                 </th>
                 <th scope='col' className='py-3 px-4'>
-                  Shop name
+                  Email
                 </th>
                 <th scope='col' className='py-3 px-4'>
                   Payment status
                 </th>
                 <th scope='col' className='py-3 px-4'>
-                  Email
+                  Status
                 </th>
-                <th scope='col' className='py-3 px-4'>
-                  Division
-                </th>
-                <th scope='col' className='py-3 px-4'>
-                  District
-                </th>
+
                 <th scope='col' className='py-3 px-4'>
                   Action
                 </th>
@@ -88,19 +84,14 @@ const DeactivateVendor = () => {
                     V.Gasimov
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    Easy Shop
-                  </td>
-                  <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    <span>Pending</span>
-                  </td>
-                  <td className='py-1 px-4 font-medium whitespace-nowrap'>
                     vuqar585@gmail.com
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
                     <span>Pending</span>
                   </td>
+
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    <span>Pending</span>
+                    <span>Deactivate</span>
                   </td>
 
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
