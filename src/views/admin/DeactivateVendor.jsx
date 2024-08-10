@@ -21,7 +21,7 @@ const DeactivateVendor = () => {
             onChange={(e) => setPerPage(parseInt(e.target.value))}
             name=''
             id=''
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
+            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-indigo-200'
           >
             <option value='5' className=''>
               5
