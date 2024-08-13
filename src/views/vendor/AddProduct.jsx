@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LuImagePlus } from 'react-icons/lu';
+import { MdOutlineClose } from 'react-icons/md';
 
 const AddProduct = () => {
   const categories = [
@@ -70,9 +71,32 @@ const AddProduct = () => {
     const length = files.length;
     if (length > 0) {
       setImages([...images, ...files]);
+      let imageUrl = [];
+      for (let i = 0; i < length; i++) {
+        imageUrl.push({ url: URL.createObjectURL(files[i]) });
+      }
+      setImagesShow([...imagesShow, ...imageUrl]);
     }
   };
-  console.log(images);
+
+  const changeImage = (img, index) => {
+    if (img) {
+      let tempUrl = imagesShow;
+      let tempImages = images;
+      tempImages[index] = img;
+      tempUrl[index] = { url: URL.createObjectURL(img) };
+      setImagesShow([...tempUrl]);
+      setImages([...tempImages]);
+    }
+  };
+
+  const removeImage = (i) => {
+    const filterImage = images.filter((img, index) => index !== i);
+    const filterImageUrl = imagesShow.filter((img, index) => index !== i);
+
+    setImages(filterImage);
+    setImagesShow(filterImageUrl);
+  };
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -216,6 +240,30 @@ const AddProduct = () => {
               ></textarea>
             </div>
             <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-indigo-100 mb-4'>
+              {imagesShow.map((img, i) => (
+                <div className='h-[180px] relative'>
+                  <label htmlFor={i}>
+                    <img
+                      src={img.url}
+                      alt='Showing input of product images.'
+                      className='w-full h-full rounded-lg object-cover'
+                    />
+                  </label>
+                  <input
+                    onChange={(e) => changeImage(e.target.files[0], i)}
+                    type='file'
+                    id={i}
+                    className='hidden'
+                  />
+                  <span
+                    onClick={() => removeImage(i)}
+                    className='p-1 z-10 cursor-pointer bg-indigo-700 bg-opacity-75 hover:shadow-lg hover:shadow-indigo-300/50 text-indigo-100 absolute top-1 right-1 rounded-full'
+                  >
+                    <MdOutlineClose size={25} />
+                  </span>
+                </div>
+              ))}
+
               <label
                 htmlFor='image'
                 className='flex justify-center items-center flex-col h-[180px] cursor-pointer border border-dashed hover:border-orange-500 w-full text-indigo-100'
@@ -233,6 +281,14 @@ const AddProduct = () => {
                 onChange={imageHandler}
                 className='hidden'
               />
+            </div>
+            <div>
+              <button
+                className='bg-indigo-600
+                    hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
+              >
+                Add product
+              </button>
             </div>
           </form>
         </div>
