@@ -105,7 +105,10 @@ const AddProduct = () => {
       </h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-lg'>
         <div className='flex justify-end items-center pb-4'>
-          <Link className='bg-indigo-600 hover:shadow-indigo-700/50 hover:shadow-lg text-indigo-100 rounded-lg px-7 py-2 my-2'>
+          <Link
+            to='/vendor/dashboard/all-products'
+            className='bg-indigo-600 hover:shadow-indigo-700/50 hover:shadow-lg text-indigo-100 rounded-lg px-7 py-2 my-2'
+          >
             All products
           </Link>
         </div>
