@@ -1,11 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../Pagination';
-import {
-  MdDeleteOutline,
-  MdOutlineEditNote,
-  MdOutlineRemoveRedEye,
-} from 'react-icons/md';
+import { MdOutlineRemoveRedEye } from 'react-icons/md';
 
 const Vendors = () => {
   const [currentPage, setCurrentPage] = useState(1);

@@ -10,6 +10,10 @@ const DiscountProducts = lazy(() =>
   import('../../views/vendor/DiscountProducts')
 );
 const Orders = lazy(() => import('../../views/vendor/Orders'));
+const Payments = lazy(() => import('../../views/vendor/Payments'));
+const ChatCustomer = lazy(() => import('../../views/vendor/ChatCustomer'));
+const ChatSupport = lazy(() => import('../../views/vendor/ChatSupport'));
+const MyProfile = lazy(() => import('../../views/vendor/MyProfile'));
 
 export const vendorRoutes = [
   {
@@ -20,26 +24,59 @@ export const vendorRoutes = [
   {
     path: '/vendor/dashboard',
     element: <VendorDashboard />,
-    ability: ['vendor'],
+    role: 'vendor',
+    status: 'active',
   },
   {
     path: '/vendor/dashboard/add-product',
     element: <AddProduct />,
-    ability: ['vendor'],
+    role: 'vendor',
+    status: 'active',
   },
   {
     path: '/vendor/dashboard/all-products',
     element: <AllProducts />,
-    ability: ['vendor'],
+    role: 'vendor',
+    status: 'active',
   },
   {
     path: '/vendor/dashboard/discount-products',
     element: <DiscountProducts />,
-    ability: ['vendor'],
+    role: 'vendor',
+    status: 'active',
   },
   {
     path: '/vendor/dashboard/orders',
     element: <Orders />,
-    ability: ['vendor'],
+    role: 'vendor',
+    ability: ['active', 'deactive'],
+  },
+  {
+    path: '/vendor/dashboard/payments',
+    element: <Payments />,
+    role: 'vendor',
+    status: 'active',
+  },
+  {
+    path: '/vendor/dashboard/chat-customer/:customerId',
+    element: <ChatCustomer />,
+    role: 'vendor',
+    status: 'active',
+  },
+  {
+    path: '/vendor/dashboard/chat-customer',
+    element: <ChatCustomer />,
+    role: 'vendor',
+    status: 'active',
+  },
+  {
+    path: '/vendor/dashboard/chat-support',
+    element: <ChatSupport />,
+    ability: ['active', 'deactive', 'pending'],
+  },
+  {
+    path: '/vendor/dashboard/my-profile',
+    element: <MyProfile />,
+    ability: ['active', 'deactive', 'pending'],
   },
 ];

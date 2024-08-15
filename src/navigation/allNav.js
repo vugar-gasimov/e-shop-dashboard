@@ -10,7 +10,7 @@ import {
   MdOutlineDiscount,
 } from 'react-icons/md';
 import { TiShoppingCart } from 'react-icons/ti';
-import { BsBoxes, BsCartCheck } from 'react-icons/bs';
+import { BsBoxes, BsCartCheck, BsPersonCircle } from 'react-icons/bs';
 import { FaHandHoldingUsd } from 'react-icons/fa';
 import { IoMdChatboxes, IoMdChatbubbles } from 'react-icons/io';
 const DASHBOARD_ICON = <MdOutlineDashboard />;
@@ -28,6 +28,8 @@ const ORDERS = <BsCartCheck />;
 const PAYMENTS = <FaHandHoldingUsd />;
 const CHAT_CUSTOMER = <IoMdChatbubbles />;
 const CHAT_SUPPORT = <IoMdChatboxes />;
+const MY_PROFILE = <BsPersonCircle />;
+
 export const allNav = [
   {
     id: 1,
@@ -140,5 +142,12 @@ export const allNav = [
     icon: CHAT_SUPPORT,
     role: 'vendor',
     path: '/vendor/dashboard/chat-support',
+  },
+  {
+    id: 17,
+    title: 'My Profile',
+    icon: MY_PROFILE,
+    role: 'vendor',
+    path: '/vendor/dashboard/my-profile',
   },
 ];
