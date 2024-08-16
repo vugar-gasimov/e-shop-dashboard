@@ -57,7 +57,10 @@ const Orders = () => {
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
-                      <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                      <Link
+                        to={`/vendor/dashboard/order-details/45`}
+                        className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                      >
                         <LuPackageSearch size={24} />
                       </Link>
                     </div>

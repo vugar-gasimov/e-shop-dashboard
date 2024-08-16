@@ -12,7 +12,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
     const navs = getNav('vendor');
     setAllNav(navs);
   }, []);
-  console.log(allNav);
+
   return (
     <div>
       <div

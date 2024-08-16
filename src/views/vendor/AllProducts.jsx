@@ -87,7 +87,10 @@ const AllProducts = () => {
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
-                      <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                      <Link
+                        to={`/vendor/dashboard/edit-product/35`}
+                        className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                      >
                         <MdOutlineEditNote size={24} />
                       </Link>
                       <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
