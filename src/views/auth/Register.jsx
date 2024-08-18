@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { PropagateLoader } from 'react-spinners';
+import { overrideStyle } from '../../utils/utils';
+import { vendor_register } from '../../store/Reducers/authReducer';
 
 const Register = () => {
+  const dispatch = useDispatch();
+
+  const { loader } = useSelector((state) => state.auth);
+
   const [state, setState] = useState({
     name: '',
     email: '',
@@ -18,6 +26,7 @@ const Register = () => {
 
   const submit = (e) => {
     e.preventDefault();
+    dispatch(vendor_register(state));
   };
 
   return (
@@ -101,10 +110,18 @@ const Register = () => {
             </div>
             <div className='flex items-center justify-between'>
               <button
+                disabled={loader ? true : false}
                 className='bg-slate-800 w-full hover:bg-slate-600 hover:shadow-lg text-white hover:text-slate-100 font-bold py-2 px-7 mb-3 rounded-md focus:outline-none focus:shadow-outline'
                 type='submit'
               >
-                Register
+                {loader ? (
+                  <PropagateLoader
+                    color='#D1D5DB'
+                    cssOverride={overrideStyle}
+                  />
+                ) : (
+                  'Register'
+                )}
               </button>
             </div>
             <div className='flex items-center mb-2 gap-3 justify-center'>
