@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
+import { PropagateLoader } from 'react-spinners';
+import { overrideStyle } from '../../utils/utils';
+import toast from 'react-hot-toast';
+import { clearMessages, vendor_login } from '../../store/Reducers/authReducer';
 
 const Login = () => {
+  const dispatch = useDispatch();
+
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.auth
+  );
+
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -17,7 +28,19 @@ const Login = () => {
 
   const submit = (e) => {
     e.preventDefault();
+    dispatch(vendor_login(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
 
   return (
     <div className=' min-w-screen min-h-screen bg-[#cdcae9] flex justify-center items-center'>
@@ -69,10 +92,18 @@ const Login = () => {
 
             <div className='flex items-center justify-between'>
               <button
+                disabled={loader ? true : false}
                 className='bg-slate-800 w-full hover:bg-slate-600 hover:shadow-lg text-white hover:text-slate-100 font-bold py-2 px-7 mb-3 rounded-md focus:outline-none focus:shadow-outline'
                 type='submit'
               >
-                Login
+                {loader ? (
+                  <PropagateLoader
+                    color='#D1D5DB'
+                    cssOverride={overrideStyle}
+                  />
+                ) : (
+                  'Login'
+                )}
               </button>
             </div>
             <div className='flex items-center mb-2 gap-3 justify-center'>

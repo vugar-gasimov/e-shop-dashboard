@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaGoogle } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
 import { PropagateLoader } from 'react-spinners';
 import { overrideStyle } from '../../utils/utils';
-import { vendor_register } from '../../store/Reducers/authReducer';
+import {
+  vendor_register,
+  clearMessages,
+} from '../../store/Reducers/authReducer';
+
+import toast from 'react-hot-toast';
 
 const Register = () => {
   const dispatch = useDispatch();
 
-  const { loader } = useSelector((state) => state.auth);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.auth
+  );
 
   const [state, setState] = useState({
     name: '',
@@ -28,6 +35,17 @@ const Register = () => {
     e.preventDefault();
     dispatch(vendor_register(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
 
   return (
     <div className=' min-w-screen min-h-screen bg-[#cdcae9] flex justify-center items-center'>
