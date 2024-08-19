@@ -1,6 +1,5 @@
 import { lazy } from 'react';
 
-const Home = lazy(() => import('../../views/Home'));
 const VendorDashboard = lazy(() =>
   import('../../views/vendor/VendorDashboard')
 );
@@ -18,11 +17,6 @@ const ChatSupport = lazy(() => import('../../views/vendor/ChatSupport'));
 const MyProfile = lazy(() => import('../../views/vendor/MyProfile'));
 
 export const vendorRoutes = [
-  {
-    path: '/',
-    element: <Home />,
-    ability: ['admin', 'vendor'],
-  },
   {
     path: '/vendor/dashboard',
     element: <VendorDashboard />,

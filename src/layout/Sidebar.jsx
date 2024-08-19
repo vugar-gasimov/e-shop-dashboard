@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { getNav } from '../navigation/index';
 import { MdExitToApp, MdOutlineList } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+
 const LOGOUT_ICON = <MdExitToApp />;
 
 const Sidebar = ({ showSidebar, setShowSidebar }) => {
-  const { pathname } = useLocation();
+  const dispatch = useDispatch();
+  const { role } = useSelector((state) => state.auth);
 
+  const { pathname } = useLocation();
   const [allNav, setAllNav] = useState([]);
+
   useEffect(() => {
-    const navs = getNav('vendor');
+    const navs = getNav(role);
     setAllNav(navs);
-  }, []);
+  }, [role]);
 
   return (
     <div>
