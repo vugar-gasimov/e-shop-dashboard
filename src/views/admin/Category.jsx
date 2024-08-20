@@ -13,6 +13,24 @@ const Category = () => {
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+  const [showImage, setShowImage] = useState('');
+
+  const [state, setState] = useState({
+    name: '',
+    image: '',
+  });
+
+  const imageHandler = (e) => {
+    let files = e.target.files;
+    if (files.length > 0) {
+      setShowImage(URL.createObjectURL(files[0]));
+      setState({
+        ...state,
+        image: files[0],
+      });
+    }
+  };
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <div className='flex lg:hidden justify-between items-center mb-5 p-4 bg-[#6a5fdf] rounded-md'>
@@ -134,6 +152,10 @@ const Category = () => {
                 <div className='flex flex-col w-full gap-1 mb-3'>
                   <label htmlFor='name'>Category name</label>
                   <input
+                    value={state.name}
+                    onChange={(e) =>
+                      setState({ ...state, name: e.target.value })
+                    }
                     type='text'
                     id='name'
                     name='category_name'
@@ -146,12 +168,23 @@ const Category = () => {
                     htmlFor='image'
                     className='flex justify-center items-center flex-col h-[238px] cursor-pointer border border-dashed hover:border-indigo-700 w-full border-[#d0d2d6]'
                   >
-                    <span>
-                      <MdOutlineImage size={25} />
-                    </span>
-                    <span>Select image</span>
+                    {showImage ? (
+                      <img
+                        src={showImage}
+                        alt='Added category image.'
+                        className='w-full h-full object-contain'
+                      />
+                    ) : (
+                      <>
+                        <span>
+                          <MdOutlineImage size={25} />
+                        </span>
+                        <span>Select image</span>
+                      </>
+                    )}
                   </label>
                   <input
+                    onChange={imageHandler}
                     type='file'
                     name='image'
                     id='image'
