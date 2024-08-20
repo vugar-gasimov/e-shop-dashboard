@@ -51,13 +51,13 @@ export const vendorRoutes = [
     path: '/vendor/dashboard/orders',
     element: <Orders />,
     role: 'vendor',
-    ability: ['active', 'deactive'],
+    visibility: ['active', 'deactive'],
   },
   {
     path: '/vendor/dashboard/order/details/:orderId',
     element: <OrderDetails />,
     role: 'vendor',
-    ability: ['active', 'deactive'],
+    visibility: ['active', 'deactive'],
   },
   {
     path: '/vendor/dashboard/payments',
@@ -80,11 +80,12 @@ export const vendorRoutes = [
   {
     path: '/vendor/dashboard/chat-support',
     element: <ChatSupport />,
-    ability: ['active', 'deactive', 'pending'],
+    role: 'vendor',
+    visibility: ['active', 'deactive', 'pending'],
   },
   {
     path: '/vendor/dashboard/my-profile',
     element: <MyProfile />,
-    ability: ['active', 'deactive', 'pending'],
+    visibility: ['active', 'deactive', 'pending'],
   },
 ];
