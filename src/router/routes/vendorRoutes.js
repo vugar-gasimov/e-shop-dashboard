@@ -15,8 +15,20 @@ const Payments = lazy(() => import('../../views/vendor/Payments'));
 const ChatCustomer = lazy(() => import('../../views/vendor/ChatCustomer'));
 const ChatSupport = lazy(() => import('../../views/vendor/ChatSupport'));
 const MyProfile = lazy(() => import('../../views/vendor/MyProfile'));
+const Pending = lazy(() => import('../../views/Pending'));
+const Deactive = lazy(() => import('../../views/Deactive'));
 
 export const vendorRoutes = [
+  {
+    path: '/vendor/account-pending',
+    element: <Pending />,
+    ability: 'vendor',
+  },
+  {
+    path: '/vendor/account-deactive',
+    element: <Deactive />,
+    ability: 'vendor',
+  },
   {
     path: '/vendor/dashboard',
     element: <VendorDashboard />,
@@ -86,6 +98,7 @@ export const vendorRoutes = [
   {
     path: '/vendor/dashboard/my-profile',
     element: <MyProfile />,
+    role: 'vendor',
     visibility: ['active', 'deactive', 'pending'],
   },
 ];
