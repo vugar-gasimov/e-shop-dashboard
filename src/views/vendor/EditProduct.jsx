@@ -165,6 +165,7 @@ const EditProduct = () => {
                   <div className='flex justify-start items-start flex-col h-[200px] overflow-x-hidden'>
                     {allCategory.map((c, i) => (
                       <span
+                        key={c.name}
                         className={`px-4 py-2 hover:bg-indigo-500 hover:text-indigo-50 hover:shadow-lg w-full cursor-pointer ${
                           category === c.name && 'bg-indigo-500'
                         }`}
@@ -237,7 +238,7 @@ const EditProduct = () => {
             </div>
             <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-indigo-100 mb-4'>
               {imagesShow.map((img, i) => (
-                <div>
+                <div key={i}>
                   <label htmlFor={i}>
                     <img src={img} alt='Product images.' />
                   </label>

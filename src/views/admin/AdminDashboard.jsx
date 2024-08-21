@@ -175,7 +175,7 @@ const AdminDashboard = () => {
                       <Link className='text-md font-normal'>Admin</Link>
                       <time
                         className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        datetime=''
+                        dateTime=''
                       >
                         2day ago
                       </time>
@@ -198,7 +198,7 @@ const AdminDashboard = () => {
                       <Link className='text-md font-normal'>Admin</Link>
                       <time
                         className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        datetime=''
+                        dateTime=''
                       >
                         2day ago
                       </time>
@@ -221,7 +221,7 @@ const AdminDashboard = () => {
                       <Link className='text-md font-normal'>Admin</Link>
                       <time
                         className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        datetime=''
+                        dateTime=''
                       >
                         2day ago
                       </time>

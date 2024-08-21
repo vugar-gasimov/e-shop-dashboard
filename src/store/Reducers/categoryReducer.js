@@ -14,7 +14,9 @@ export const addCategory = createAsyncThunk(
 
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response?.data);
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
     }
   }
 );
@@ -42,11 +44,12 @@ export const categoryReducer = createSlice({
       })
       .addCase(addCategory.rejected, (state, { payload }) => {
         state.loader = false;
-        state.errorMessage = payload.error || 'Login failed.';
+        state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(addCategory.fulfilled, (state, { payload }) => {
         state.loader = false;
-        state.successMessage = payload.message || 'Login successful!';
+        state.successMessage = payload.message;
+        state.categories = [...state.categories, payload.categories];
       });
   },
 });
