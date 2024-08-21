@@ -37,14 +37,14 @@ export const categoryReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(admin_login.pending, (state, { payload }) => {
+      .addCase(addCategory.pending, (state, { payload }) => {
         state.loader = true;
       })
-      .addCase(admin_login.rejected, (state, { payload }) => {
+      .addCase(addCategory.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.error || 'Login failed.';
       })
-      .addCase(admin_login.fulfilled, (state, { payload }) => {
+      .addCase(addCategory.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message || 'Login successful!';
       });

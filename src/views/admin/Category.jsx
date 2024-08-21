@@ -9,9 +9,13 @@ import {
 } from 'react-icons/md';
 import { PropagateLoader } from 'react-spinners';
 import { overrideStyle } from '../../utils/utils';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { addCategory } from './../../store/Reducers/categoryReducer';
 
 const Category = () => {
+  const dispatch = useDispatch();
+  const { loader } = useSelector((state) => state.category);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
@@ -35,9 +39,8 @@ const Category = () => {
   };
   const add_category = (e) => {
     e.preventDefault();
-    console.log(state);
+    dispatch(addCategory(state));
   };
-  const loader = false;
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
