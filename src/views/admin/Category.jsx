@@ -7,6 +7,9 @@ import {
   MdOutlineEditNote,
   MdOutlineImage,
 } from 'react-icons/md';
+import { PropagateLoader } from 'react-spinners';
+import { overrideStyle } from '../../utils/utils';
+import { useSelector } from 'react-redux';
 
 const Category = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -30,6 +33,11 @@ const Category = () => {
       });
     }
   };
+  const add_category = (e) => {
+    e.preventDefault();
+    console.log(state);
+  };
+  const loader = false;
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -148,7 +156,7 @@ const Category = () => {
                 </div>
               </div>
 
-              <form className=''>
+              <form onSubmit={add_category} className=''>
                 <div className='flex flex-col w-full gap-1 mb-3'>
                   <label htmlFor='name'>Category name</label>
                   <input
@@ -193,10 +201,18 @@ const Category = () => {
                   />
                   <div className=''>
                     <button
-                      className='bg-indigo-600
-                    hover:bg-indigo-400 w-full hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
+                      disabled={loader ? true : false}
+                      className='bg-indigo-600 w-full  hover:bg-indigo-400 hover:shadow-indigo-400/40  text-white hover:shadow-md hover:text-slate-100 font-bold py-2 px-7 mb-3 my-2 rounded-lg focus:outline-none focus:shadow-outline'
+                      type='submit'
                     >
-                      Add category
+                      {loader ? (
+                        <PropagateLoader
+                          color='#D1D5DB'
+                          cssOverride={overrideStyle}
+                        />
+                      ) : (
+                        'Add category'
+                      )}
                     </button>
                   </div>
                 </div>
