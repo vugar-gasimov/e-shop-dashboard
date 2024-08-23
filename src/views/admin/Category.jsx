@@ -7,7 +7,7 @@ import {
   MdOutlineEditNote,
   MdOutlineImage,
 } from 'react-icons/md';
-import { PropagateLoader } from 'react-spinners';
+import { MoonLoader, PropagateLoader } from 'react-spinners';
 import { overrideStyle } from '../../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -20,9 +20,8 @@ import Search from './../components/Search';
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { loader, successMessage, errorMessage } = useSelector(
-    (state) => state.category
-  );
+  const { loader, textLoader, successMessage, errorMessage, categories } =
+    useSelector((state) => state.category);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
@@ -113,34 +112,53 @@ const Category = () => {
                   </tr>
                 </thead>
                 <tbody className=''>
-                  {[1, 2, 3, 4, 5].map((d, i) => (
-                    <tr key={i} className=''>
-                      <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                        {d}
-                      </td>
-                      <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                        <img
-                          src={`http://localhost:3000/images/category/${d}.jpg`}
-                          alt='Product image.'
-                          className='w-[45px] h-[45px] rounded-lg'
-                        />
-                      </td>
-                      <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                        Item name
-                      </td>
-
-                      <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                        <div className='flex justify-start items-center gap-4'>
-                          <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
-                            <MdOutlineEditNote size={24} />
-                          </Link>
-                          <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
-                            <MdDeleteOutline size={24} />
-                          </Link>
+                  {textLoader ? (
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td className='py-1 px-4  whitespace-nowrap justify-center text-center '>
+                        <div className='flex justify-center items-center h-[200px]'>
+                          <PropagateLoader
+                            color='#D1D5DB'
+                            cssOverride={overrideStyle}
+                          />
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  ) : (
+                    categories.map((d, i) => (
+                      <tr key={i} className=''>
+                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                          {i + 1}
+                        </td>
+                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                          {d.image ? (
+                            <img
+                              src={d.image}
+                              alt={`Product ${d.name}.`}
+                              className='w-[45px] h-[45px] rounded-lg object-cover'
+                            />
+                          ) : (
+                            <MdOutlineImage />
+                          )}
+                        </td>
+                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                          {d.name}
+                        </td>
+
+                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                          <div className='flex justify-start items-center gap-4'>
+                            <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                              <MdOutlineEditNote size={24} />
+                            </Link>
+                            <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                              <MdDeleteOutline size={24} />
+                            </Link>
+                          </div>
+                        </td>
+                      </tr>
+                    ))
+                  )}
                 </tbody>
               </table>
             </div>

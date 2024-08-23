@@ -34,7 +34,7 @@ export const getCategories = createAsyncThunk(
           withCredentials: true,
         }
       );
-      console.log(data);
+
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
@@ -48,7 +48,9 @@ const initialState = {
   successMessage: '',
   errorMessage: '',
   loader: false,
+  textLoader: false,
   categories: [],
+  totalCategories: 0,
 };
 
 export const categoryReducer = createSlice({
@@ -73,6 +75,19 @@ export const categoryReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         state.categories = [...state.categories, payload.categories];
+      })
+      .addCase(getCategories.pending, (state, { payload }) => {
+        state.textLoader = true;
+      })
+      .addCase(getCategories.rejected, (state, { payload }) => {
+        state.textLoader = false;
+        state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(getCategories.fulfilled, (state, { payload }) => {
+        state.textLoader = false;
+        state.totalCategories = payload.totalCategories;
+        state.successMessage = payload.message;
+        state.categories = payload.categories;
       });
   },
 });
