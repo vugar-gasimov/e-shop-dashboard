@@ -13,8 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   addCategory,
   clearMessages,
+  getCategories,
 } from './../../store/Reducers/categoryReducer';
 import toast from 'react-hot-toast';
+import Search from './../components/Search';
 
 const Category = () => {
   const dispatch = useDispatch();
@@ -64,6 +66,15 @@ const Category = () => {
     }
   }, [dispatch, successMessage, errorMessage]);
 
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(getCategories(obj));
+  }, [dispatch, currentPage, searchValue, perPage]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <div className='flex lg:hidden justify-between items-center mb-5 p-4 bg-[#6a5fdf] rounded-md'>
@@ -78,29 +89,11 @@ const Category = () => {
       <div className='flex flex-wrap w-full'>
         <div className='w-full lg:w-7/12'>
           <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-            <div className='flex justify-between items-center'>
-              <select
-                onChange={(e) => setPerPage(parseInt(e.target.value))}
-                name=''
-                id=''
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
-              >
-                <option value='5' className=''>
-                  5
-                </option>
-                <option value='10' className=''>
-                  10
-                </option>
-                <option value='20' className=''>
-                  20
-                </option>
-              </select>
-              <input
-                type='text'
-                placeholder='Search...'
-                className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
-              />
-            </div>
+            <Search
+              setPerPage={setPerPage}
+              setSearchValue={setSearchValue}
+              searchValue={searchValue}
+            />
             <div className='relative overflow-x-auto'>
               <table className='w-full text-sm text-left text-[#d0d2d6]  '>
                 <thead className='text-sm text-[#d0d2d6] uppercase border-b border-slate-700'>

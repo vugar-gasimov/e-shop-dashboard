@@ -19,7 +19,30 @@ export const addCategory = createAsyncThunk(
       );
     }
   }
-);
+); // End of addCategory method.
+
+export const getCategories = createAsyncThunk(
+  'category/getCategories',
+  async (
+    { page, perPage, searchValue },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/get-categories?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of getCategories method.
 
 const initialState = {
   successMessage: '',
@@ -49,7 +72,7 @@ export const categoryReducer = createSlice({
       .addCase(addCategory.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
-        state.categories = [...state.categories, payload.category];
+        state.categories = [...state.categories, payload.categories];
       });
   },
 });
