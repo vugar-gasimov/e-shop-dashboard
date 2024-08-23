@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../Pagination';
 import {
@@ -10,11 +10,17 @@ import {
 import { PropagateLoader } from 'react-spinners';
 import { overrideStyle } from '../../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
-import { addCategory } from './../../store/Reducers/categoryReducer';
+import {
+  addCategory,
+  clearMessages,
+} from './../../store/Reducers/categoryReducer';
+import toast from 'react-hot-toast';
 
 const Category = () => {
   const dispatch = useDispatch();
-  const { loader } = useSelector((state) => state.category);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.category
+  );
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
@@ -41,6 +47,22 @@ const Category = () => {
     e.preventDefault();
     dispatch(addCategory(state));
   };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+      setState({
+        name: '',
+        image: '',
+      });
+      setShowImage('');
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>

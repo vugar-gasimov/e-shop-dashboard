@@ -49,7 +49,7 @@ export const categoryReducer = createSlice({
       .addCase(addCategory.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
-        state.categories = [...state.categories, payload.categories];
+        state.categories = [...state.categories, payload.category];
       });
   },
 });
