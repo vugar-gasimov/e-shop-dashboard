@@ -1,35 +1,24 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { LuImagePlus } from 'react-icons/lu';
 import { MdOutlineClose } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { getCategories } from '../../store/Reducers/categoryReducer';
+import { add_product } from './../../store/Reducers/productReducer';
 
 const AddProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: 'Sports',
-    },
-    {
-      id: 2,
-      name: 'T-shirt',
-    },
-    {
-      id: 3,
-      name: 'Phone',
-    },
-    {
-      id: 4,
-      name: 'Computer',
-    },
-    {
-      id: 5,
-      name: 'Watch',
-    },
-    {
-      id: 6,
-      name: 'Pants',
-    },
-  ];
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(
+      getCategories({
+        page: '',
+        perPage: '',
+        searchValue: '',
+      })
+    );
+  }, [dispatch]);
 
   const [state, setState] = useState({
     name: '',
@@ -49,7 +38,7 @@ const AddProduct = () => {
 
   const [cateShow, setCateShow] = useState(false);
   const [category, setCategory] = useState('');
-  const [allCategory, setAllCategory] = useState(categories);
+  const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
   const categorySearch = (e) => {
@@ -98,6 +87,28 @@ const AddProduct = () => {
     setImagesShow(filterImageUrl);
   };
 
+  const add = (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append('name', state.name);
+    formData.append('description', state.description);
+    formData.append('discount', state.discount);
+    formData.append('price', state.price);
+    formData.append('brand', state.brand);
+    formData.append('stock', state.stock);
+    formData.append('shopName', 'EasyShop');
+    formData.append('name', state.name);
+    formData.append('category', category);
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
+    dispatch(add_product(formData));
+  };
+
+  useEffect(() => {
+    setAllCategory(categories);
+  }, [categories]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3 text-indigo-700'>
@@ -113,7 +124,7 @@ const AddProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={add}>
             <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-indigo-100'>
               <div className='flex flex-col w-full gap-1'>
                 <label htmlFor='name'>Product name</label>
