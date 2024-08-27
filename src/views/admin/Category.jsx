@@ -7,7 +7,7 @@ import {
   MdOutlineEditNote,
   MdOutlineImage,
 } from 'react-icons/md';
-import { MoonLoader, PropagateLoader } from 'react-spinners';
+import { PropagateLoader } from 'react-spinners';
 import { overrideStyle } from '../../utils/utils';
 import { useDispatch, useSelector } from 'react-redux';
 import {

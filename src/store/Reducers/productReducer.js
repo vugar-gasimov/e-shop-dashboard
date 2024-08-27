@@ -8,7 +8,7 @@ export const add_product = createAsyncThunk(
       const { data } = await api.post('/add-product', product, {
         withCredentials: true,
       });
-      console.log(data);
+
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
@@ -45,7 +45,6 @@ const initialState = {
   successMessage: '',
   errorMessage: '',
   loader: false,
-  textLoader: false,
   products: [],
   totalProducts: 0,
 };
@@ -73,15 +72,10 @@ export const productReducer = createSlice({
         state.successMessage = payload.message;
         state.products = [...state.products, payload.products];
       })
-      .addCase(get_products.pending, (state, { payload }) => {
-        state.textLoader = true;
-      })
       .addCase(get_products.rejected, (state, { payload }) => {
-        state.textLoader = false;
         state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(get_products.fulfilled, (state, { payload }) => {
-        state.textLoader = false;
         state.totalProducts = payload.totalProducts;
         state.successMessage = payload.message;
         state.products = payload.products;

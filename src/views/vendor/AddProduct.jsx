@@ -4,11 +4,20 @@ import { LuImagePlus } from 'react-icons/lu';
 import { MdOutlineClose } from 'react-icons/md';
 import { useDispatch, useSelector } from 'react-redux';
 import { getCategories } from '../../store/Reducers/categoryReducer';
-import { add_product } from './../../store/Reducers/productReducer';
+import {
+  add_product,
+  clearMessages,
+} from './../../store/Reducers/productReducer';
+import { PropagateLoader } from 'react-spinners';
+import { overrideStyle } from '../../utils/utils';
+import toast from 'react-hot-toast';
 
 const AddProduct = () => {
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
+  const { loader, successMessage, errorMessage } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
     dispatch(
@@ -68,6 +77,28 @@ const AddProduct = () => {
     }
   };
 
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+      setState({
+        name: '',
+        description: '',
+        discount: '',
+        price: '',
+        brand: '',
+        stock: '',
+      });
+      setImages([]);
+      setImagesShow([]);
+      setCategory('');
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
+
   const changeImage = (img, index) => {
     if (img) {
       let tempUrl = imagesShow;
@@ -97,11 +128,12 @@ const AddProduct = () => {
     formData.append('brand', state.brand);
     formData.append('stock', state.stock);
     formData.append('shopName', 'EasyShop');
-    formData.append('name', state.name);
+
     formData.append('category', category);
     for (let i = 0; i < images.length; i++) {
       formData.append('images', images[i]);
     }
+    console.log(state);
     dispatch(add_product(formData));
   };
 
@@ -299,10 +331,19 @@ const AddProduct = () => {
             </div>
             <div>
               <button
+                disabled={loader ? true : false}
+                type='submit'
                 className='bg-indigo-600
                     hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
               >
-                Add product
+                {loader ? (
+                  <PropagateLoader
+                    color='#D1D5DB'
+                    cssOverride={overrideStyle}
+                  />
+                ) : (
+                  'Add product'
+                )}
               </button>
             </div>
           </form>
