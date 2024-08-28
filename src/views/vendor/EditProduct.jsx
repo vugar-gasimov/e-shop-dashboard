@@ -91,6 +91,12 @@ const EditProduct = () => {
   }, [product]);
 
   useEffect(() => {
+    if (categories.length > 0) {
+      setAllCategory(categories);
+    }
+  }, [categories]);
+
+  useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
       dispatch(clearMessages());
@@ -187,22 +193,23 @@ const EditProduct = () => {
                   </div>
                   <div className='pt-14'></div>
                   <div className='flex justify-start items-start flex-col h-[200px] overflow-x-hidden'>
-                    {allCategory.map((c, i) => (
-                      <span
-                        key={c.name}
-                        className={`px-4 py-2 hover:bg-indigo-500 hover:text-indigo-50 hover:shadow-lg w-full cursor-pointer ${
-                          category === c.name && 'bg-indigo-500'
-                        }`}
-                        onClick={() => {
-                          setCateShow(false);
-                          setCategory(c.name);
-                          setSearchValue('');
-                          setAllCategory(categories);
-                        }}
-                      >
-                        {c.name}
-                      </span>
-                    ))}
+                    {allCategory.length > 0 &&
+                      allCategory.map((c, i) => (
+                        <span
+                          key={c.name}
+                          className={`px-4 py-2 hover:bg-indigo-500 hover:text-indigo-50 hover:shadow-lg w-full cursor-pointer ${
+                            category === c.name && 'bg-indigo-500'
+                          }`}
+                          onClick={() => {
+                            setCateShow(false);
+                            setCategory(c.name);
+                            setSearchValue('');
+                            setAllCategory(categories);
+                          }}
+                        >
+                          {c.name}
+                        </span>
+                      ))}
                   </div>
                 </div>
               </div>
@@ -268,9 +275,7 @@ const EditProduct = () => {
                     <label htmlFor={i}>
                       <img
                         src={img}
-                        alt={`Product ${
-                          img.description || `Product Image ${i + 1}`
-                        } img`}
+                        alt={`${img.description || `Product Image ${i + 1}`}`}
                       />
                     </label>
                     <input
@@ -284,12 +289,18 @@ const EditProduct = () => {
             </div>
             <div>
               <button
-                disabled={loader ? true : false}
-                className='bg-indigo-600
-                    hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
+                disabled={loader}
+                aria-busy={loader}
+                className={`bg-indigo-600 text-white rounded-lg py-2 px-7 my-2 ${
+                  loader
+                    ? 'cursor-not-allowed opacity-50'
+                    : 'hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer'
+                }`}
               >
                 {loader ? (
-                  <PropagateLoader color='#fff' cssOverride={overrideStyle} />
+                  <div className='flex justify-center w-36 items-center'>
+                    <PropagateLoader color='#fff' cssOverride={overrideStyle} />
+                  </div>
                 ) : (
                   'Save Changes'
                 )}

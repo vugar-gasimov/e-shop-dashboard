@@ -136,7 +136,8 @@ export const productReducer = createSlice({
       })
       .addCase(edit_product.rejected, (state, { payload }) => {
         state.loader = false;
-        state.errorMessage = payload.error || 'An error occurred';
+        state.errorMessage =
+          payload.error || 'An error occurred during updating the product.';
       })
       .addCase(edit_product.fulfilled, (state, { payload }) => {
         state.loader = false;
