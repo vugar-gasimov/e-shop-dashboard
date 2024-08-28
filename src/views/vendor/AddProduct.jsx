@@ -337,10 +337,15 @@ const AddProduct = () => {
                     hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
               >
                 {loader ? (
-                  <PropagateLoader
-                    color='#D1D5DB'
-                    cssOverride={overrideStyle}
-                  />
+                  <div
+                    className='bg-indigo-600
+                     rounded-lg w-36 px-7 '
+                  >
+                    <PropagateLoader
+                      color='#D1D5DB'
+                      cssOverride={overrideStyle}
+                    />
+                  </div>
                 ) : (
                   'Add product'
                 )}

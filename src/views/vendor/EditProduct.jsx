@@ -1,35 +1,28 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { LuImagePlus } from 'react-icons/lu';
-import { MdOutlineClose } from 'react-icons/md';
+import { Link, useParams } from 'react-router-dom';
+import { getCategories } from '../../store/Reducers/categoryReducer';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_product } from '../../store/Reducers/productReducer';
 
 const EditProduct = () => {
-  const categories = [
-    {
-      id: 1,
-      name: 'Sports',
-    },
-    {
-      id: 2,
-      name: 'T-shirt',
-    },
-    {
-      id: 3,
-      name: 'Phone',
-    },
-    {
-      id: 4,
-      name: 'Computer',
-    },
-    {
-      id: 5,
-      name: 'Watch',
-    },
-    {
-      id: 6,
-      name: 'Pants',
-    },
-  ];
+  const { productId } = useParams();
+
+  const dispatch = useDispatch();
+  const { categories } = useSelector((state) => state.category);
+
+  useEffect(() => {
+    dispatch(
+      getCategories({
+        page: '',
+        perPage: '',
+        searchValue: '',
+      })
+    );
+  }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(get_product(productId));
+  }, [dispatch, productId]);
 
   const [state, setState] = useState({
     name: '',
