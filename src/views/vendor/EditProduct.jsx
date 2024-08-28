@@ -2,7 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import { getCategories } from '../../store/Reducers/categoryReducer';
 import { useDispatch, useSelector } from 'react-redux';
-import { get_product } from '../../store/Reducers/productReducer';
+import {
+  clearMessages,
+  get_product,
+  edit_product,
+} from '../../store/Reducers/productReducer';
 import { overrideStyle } from './../../utils/utils';
 import { PropagateLoader } from 'react-spinners';
 import toast from 'react-hot-toast';
@@ -86,6 +90,31 @@ const EditProduct = () => {
     setImagesShow(product.images || []);
   }, [product]);
 
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
+
+  const update = (e) => {
+    e.preventDefault();
+    const obj = {
+      name: state.name,
+      description: state.description,
+      discount: state.discount,
+      price: state.price,
+      brand: state.brand,
+      stock: state.stock,
+      productId: productId,
+    };
+    dispatch(edit_product(obj));
+  };
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3 text-indigo-700'>
@@ -101,7 +130,7 @@ const EditProduct = () => {
           </Link>
         </div>
         <div>
-          <form>
+          <form onSubmit={update}>
             <div className='flex flex-col mb-3 md:flex-row gap-4 w-full text-indigo-100'>
               <div className='flex flex-col w-full gap-1'>
                 <label htmlFor='name'>Product name</label>

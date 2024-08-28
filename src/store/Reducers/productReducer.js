@@ -9,7 +9,6 @@ export const add_product = createAsyncThunk(
         withCredentials: true,
       });
 
-      // return fulfillWithValue(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
@@ -49,6 +48,23 @@ export const get_product = createAsyncThunk(
       const { data } = await api.get(`/get-product/${productId}`, {
         withCredentials: true,
       });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get product method.
+
+export const edit_product = createAsyncThunk(
+  'product/edit_product',
+  async (product, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post('/edit-product', product, {
+        withCredentials: true,
+      });
       console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
@@ -57,7 +73,7 @@ export const get_product = createAsyncThunk(
       );
     }
   }
-); // End of getProducts method.
+); // End of edit product method.
 
 const initialState = {
   successMessage: '',
@@ -111,6 +127,18 @@ export const productReducer = createSlice({
         state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(get_product.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.product = payload.product;
+      })
+      .addCase(edit_product.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(edit_product.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(edit_product.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
         state.product = payload.product;
