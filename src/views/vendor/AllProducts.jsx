@@ -1,14 +1,61 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Search from '../components/Search';
 import { Link } from 'react-router-dom';
 import Pagination from '../Pagination';
 import { MdDeleteOutline, MdOutlineEditNote } from 'react-icons/md';
 import { LuPackageSearch } from 'react-icons/lu';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  clearMessages,
+  get_products,
+} from '../../store/Reducers/productReducer';
+import { PropagateLoader } from 'react-spinners';
+import { overrideStyle } from '../../utils/utils';
+import toast from 'react-hot-toast';
 
 const AllProducts = () => {
+  const dispatch = useDispatch();
+  const { products, totalProducts, loader, errorMessage, successMessage } =
+    useSelector((state) => state.products);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
+
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    console.log(products);
+    dispatch(get_products(obj));
+  }, [dispatch, currentPage, searchValue, perPage]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
+
+  if (loader) {
+    return (
+      <div>
+        {' '}
+        <PropagateLoader color='#D1D5DB' cssOverride={overrideStyle} />
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return <div>Error: {errorMessage}</div>;
+  }
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3 text-indigo-700'>
@@ -54,41 +101,47 @@ const AllProducts = () => {
               </tr>
             </thead>
             <tbody className=''>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {products.map((d, i) => (
                 <tr key={i} className=''>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    {d}
+                    {i + 1 + (currentPage - 1) * perPage}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
                     <img
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
-                      alt='Product image.'
-                      className='w-[45px] h-[45px] rounded-lg'
+                      src={d.images[0]}
+                      alt={`Product ${d.name} img`}
+                      className='w-[45px] h-[45px] object-cover rounded-lg shadow-lg hover:shadow-xl transition-shadow duration-300'
                     />
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    Men full sleeve
+                    {d?.name?.length > 15
+                      ? `${d.name.substring(0, 12)}...`
+                      : d.name}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    Item name
+                    {d.category}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    Veirdo
+                    {d.brand}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    $320
+                    ${d.price}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    10%
+                    {d.discount === 0 ? (
+                      <span>No Discount</span>
+                    ) : (
+                      <span>{d.discount}%</span>
+                    )}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    23
+                    {d.stock}
                   </td>
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
                       <Link
-                        to={`/vendor/dashboard/edit-product/35`}
+                        to={`/vendor/dashboard/edit-product/${d._id}`}
                         className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
                       >
                         <MdOutlineEditNote size={24} />
@@ -106,15 +159,20 @@ const AllProducts = () => {
             </tbody>
           </table>
         </div>
-        <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
-          <Pagination
-            pageNumber={currentPage}
-            setPageNumber={setCurrentPage}
-            totalItem={50}
-            perPage={perPage}
-            showItem={3}
-          />
-        </div>
+
+        {totalProducts <= perPage ? (
+          ''
+        ) : (
+          <div className='w-full flex justify-end mt-4 bottom-4 right-4'>
+            <Pagination
+              pageNumber={currentPage}
+              setPageNumber={setCurrentPage}
+              totalItem={totalProducts}
+              perPage={perPage}
+              showItem={3}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

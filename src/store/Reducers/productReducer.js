@@ -9,6 +9,7 @@ export const add_product = createAsyncThunk(
         withCredentials: true,
       });
 
+      // return fulfillWithValue(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
@@ -53,14 +54,14 @@ export const productReducer = createSlice({
   name: 'product',
   initialState,
   reducers: {
-    clearMessages: (state, _) => {
+    clearMessages: (state) => {
       state.successMessage = '';
       state.errorMessage = '';
     },
   },
   extraReducers: (builder) => {
     builder
-      .addCase(add_product.pending, (state, { payload }) => {
+      .addCase(add_product.pending, (state) => {
         state.loader = true;
       })
       .addCase(add_product.rejected, (state, { payload }) => {
@@ -72,10 +73,15 @@ export const productReducer = createSlice({
         state.successMessage = payload.message;
         state.products = [...state.products, payload.products];
       })
+      .addCase(get_products.pending, (state) => {
+        state.loader = true;
+      })
       .addCase(get_products.rejected, (state, { payload }) => {
+        state.loader = false;
         state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(get_products.fulfilled, (state, { payload }) => {
+        state.loader = false;
         state.totalProducts = payload.totalProducts;
         state.successMessage = payload.message;
         state.products = payload.products;
