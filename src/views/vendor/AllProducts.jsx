@@ -28,7 +28,6 @@ const AllProducts = () => {
       page: parseInt(currentPage),
       searchValue,
     };
-    console.log(products);
     dispatch(get_products(obj));
   }, [dispatch, currentPage, searchValue, perPage]);
 

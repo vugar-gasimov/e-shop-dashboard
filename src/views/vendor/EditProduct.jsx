@@ -3,12 +3,18 @@ import { Link, useParams } from 'react-router-dom';
 import { getCategories } from '../../store/Reducers/categoryReducer';
 import { useDispatch, useSelector } from 'react-redux';
 import { get_product } from '../../store/Reducers/productReducer';
+import { overrideStyle } from './../../utils/utils';
+import { PropagateLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
 
 const EditProduct = () => {
   const { productId } = useParams();
 
   const dispatch = useDispatch();
   const { categories } = useSelector((state) => state.category);
+  const { product, loader, successMessage, errorMessage } = useSelector(
+    (state) => state.products
+  );
 
   useEffect(() => {
     dispatch(
@@ -42,7 +48,7 @@ const EditProduct = () => {
 
   const [cateShow, setCateShow] = useState(false);
   const [category, setCategory] = useState('');
-  const [allCategory, setAllCategory] = useState(categories);
+  const [allCategory, setAllCategory] = useState([]);
   const [searchValue, setSearchValue] = useState('');
 
   const categorySearch = (e) => {
@@ -57,7 +63,7 @@ const EditProduct = () => {
       setAllCategory(categories);
     }
   };
-  const [images, setImages] = useState([]);
+
   const [imagesShow, setImagesShow] = useState([]);
 
   const changeImage = (img, files) => {
@@ -69,20 +75,16 @@ const EditProduct = () => {
 
   useEffect(() => {
     setState({
-      name: 'Mens t-shirt',
-      description: 'Cutton t-shirt black whith white lines',
-      discount: '10',
-      price: '15',
-      brand: 'Meta',
-      stock: '14',
+      name: product.name || '',
+      description: product.description || '',
+      discount: product.discount || '',
+      price: product.price || '',
+      brand: product.brand || '',
+      stock: product.stock || '',
     });
-    setCategory('T-shirt');
-    setImagesShow([
-      'http://localhost:3000/images/admin.jpg',
-      'http://localhost:3000/images/seller.png',
-      'http://localhost:3000/images/demo.jpg',
-    ]);
-  }, []);
+    setCategory(product.category || '');
+    setImagesShow(product.images || []);
+  }, [product]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -230,26 +232,38 @@ const EditProduct = () => {
               ></textarea>
             </div>
             <div className='grid lg:grid-cols-4 grid-cols-1 md:grid-cols-3 sm:grid-cols-2 sm:gap-4 md:gap-4 gap-3 w-full text-indigo-100 mb-4'>
-              {imagesShow.map((img, i) => (
-                <div key={i}>
-                  <label htmlFor={i}>
-                    <img src={img} alt='Product images.' />
-                  </label>
-                  <input
-                    onChange={(e) => changeImage(img, e.target.files)}
-                    type='file'
-                    id={i}
-                    className='hidden'
-                  />
-                </div>
-              ))}
+              {imagesShow &&
+                imagesShow.length > 0 &&
+                imagesShow.map((img, i) => (
+                  <div key={i}>
+                    <label htmlFor={i}>
+                      <img
+                        src={img}
+                        alt={`Product ${
+                          img.description || `Product Image ${i + 1}`
+                        } img`}
+                      />
+                    </label>
+                    <input
+                      onChange={(e) => changeImage(img, e.target.files)}
+                      type='file'
+                      id={i}
+                      className='hidden'
+                    />
+                  </div>
+                ))}
             </div>
             <div>
               <button
+                disabled={loader ? true : false}
                 className='bg-indigo-600
                     hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
               >
-                Save Changes
+                {loader ? (
+                  <PropagateLoader color='#fff' cssOverride={overrideStyle} />
+                ) : (
+                  'Save Changes'
+                )}
               </button>
             </div>
           </form>

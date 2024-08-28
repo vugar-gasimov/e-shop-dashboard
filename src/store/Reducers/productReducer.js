@@ -43,13 +43,13 @@ export const get_products = createAsyncThunk(
 ); // End of getProducts method.
 
 export const get_product = createAsyncThunk(
-  'product/get_products',
+  'product/get_product',
   async (productId, { rejectWithValue, fulfillWithValue }) => {
     try {
       const { data } = await api.get(`/get-product/${productId}`, {
         withCredentials: true,
       });
-
+      console.log(data);
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
