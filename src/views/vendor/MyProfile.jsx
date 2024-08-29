@@ -3,6 +3,7 @@ import { PiUserCirclePlus } from 'react-icons/pi';
 import { FadeLoader } from 'react-spinners';
 import { FaUserEdit } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+import { uploadImage } from '../../store/Reducers/authReducer';
 
 const MyProfile = () => {
   const dispatch = useDispatch();
@@ -14,7 +15,9 @@ const MyProfile = () => {
 
   const add_image = (e) => {
     if (e.target.files.length > 0) {
-      console.log(e.target.files[0]);
+      const formData = new FormData();
+      formData.append('image', e.target.files[0]);
+      dispatch(uploadImage(formData));
     }
   };
 

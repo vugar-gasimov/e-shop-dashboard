@@ -65,7 +65,22 @@ export const vendor_register = createAsyncThunk(
       return rejectWithValue(error.response?.data);
     }
   }
-);
+); // End of vendor register method
+
+export const uploadImage = createAsyncThunk(
+  'auth/uploadImage',
+  async (image, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post('/upload-image', image, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+); // End of upload image method
 
 const returnRole = (token) => {
   if (token) {
