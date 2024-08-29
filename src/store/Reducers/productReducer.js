@@ -65,11 +65,38 @@ export const edit_product = createAsyncThunk(
       const { data } = await api.post('/edit-product', product, {
         withCredentials: true,
       });
-      console.log(data);
+
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(
         error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of edit product method.
+
+export const product_image_edit = createAsyncThunk(
+  'product/product_image_edit',
+  async (
+    { oldImage, newImage, productId },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const formData = new FormData();
+      formData.append('oldImage', oldImage);
+      formData.append('newImage', newImage);
+      formData.append('productId', productId);
+
+      const { data } = await api.post('/product-image-edit', formData, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || {
+          error: 'An error occurred during image update.',
+        }
       );
     }
   }
@@ -140,6 +167,19 @@ export const productReducer = createSlice({
           payload.error || 'An error occurred during updating the product.';
       })
       .addCase(edit_product.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.product = payload.product;
+      })
+      .addCase(product_image_edit.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(product_image_edit.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage =
+          payload.error || 'An error occurred during product image update.';
+      })
+      .addCase(product_image_edit.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
         state.product = payload.product;
