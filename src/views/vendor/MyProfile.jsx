@@ -2,12 +2,21 @@ import React from 'react';
 import { PiUserCirclePlus } from 'react-icons/pi';
 import { FadeLoader } from 'react-spinners';
 import { FaUserEdit } from 'react-icons/fa';
+import { useDispatch, useSelector } from 'react-redux';
 
 const MyProfile = () => {
+  const dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.auth);
+
   const image = true;
   const loader = true;
   const status = 'active';
-  const userInfo = true;
+
+  const add_image = (e) => {
+    if (e.target.files.length > 0) {
+      console.log(e.target.files[0]);
+    }
+  };
 
   return (
     <div className='px-2 lg:px-7 py-5'>
@@ -15,7 +24,7 @@ const MyProfile = () => {
         <div className='w-full md:w-6/12'>
           <div className='w-full p-4 bg-[#6a5fdf] rounded-md text-indigo-100'>
             <div className='flex justify-center items-center py-3'>
-              {image ? (
+              {image?.image ? (
                 <label
                   htmlFor='img'
                   className='h-[150px] w-[200px] relative  cursor-pointer   '
@@ -52,7 +61,13 @@ const MyProfile = () => {
                   )}
                 </label>
               )}
-              <input type='file' name='img' id='img' className='hidden' />
+              <input
+                onChange={add_image}
+                type='file'
+                name='img'
+                id='img'
+                className='hidden'
+              />
             </div>
             <div className='px-0 md:px-5 py-2'>
               <div className='flex justify-between text-sm flex-col gap-2 p-4 bg-indigo-800 rounded-lg relative'>
@@ -61,26 +76,26 @@ const MyProfile = () => {
                 </span>
                 <div className='flex gap-2'>
                   <span className=''>Name:</span>
-                  <span className=''>Adriano Chelentano</span>
+                  <span className=''>{userInfo.name}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className=''>Email:</span>
-                  <span className=''>adrianoctano@gmail.com</span>
+                  <span className=''>{userInfo.email}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className=''>Role:</span>
-                  <span className=''>Vendor</span>
+                  <span className=''>{userInfo.role}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className=''>Status:</span>
-                  <span className=''>Active</span>
+                  <span className=''>{userInfo.status}</span>
                 </div>
                 <div className='flex gap-2'>
                   <span className=''>Payment Account:</span>
                   <p>
                     {status === 'active' ? (
                       <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'>
-                        Pending
+                        {userInfo.payment}
                       </span>
                     ) : (
                       <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'>
@@ -92,7 +107,7 @@ const MyProfile = () => {
               </div>
             </div>
             <div className='px-0 md:px-5 py-2'>
-              {!userInfo ? (
+              {!userInfo?.shopInfo ? (
                 <form>
                   <div className='flex flex-col w-full gap-1 mb-2'>
                     <label htmlFor='shopName'>Shop name</label>
