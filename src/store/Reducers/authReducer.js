@@ -82,6 +82,21 @@ export const uploadImage = createAsyncThunk(
   }
 ); // End of upload image method
 
+export const addProfileInfo = createAsyncThunk(
+  'auth/addProfileInfo',
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post('/add-profile-info', info, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+); // End of Add Profile Info method
+
 const returnRole = (token) => {
   if (token) {
     const decodeToken = jwtDecode(token);
