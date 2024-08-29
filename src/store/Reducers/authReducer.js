@@ -160,6 +160,18 @@ export const authReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message || 'Login successful!';
         state.userInfo = payload.userInfo;
+      })
+      .addCase(uploadImage.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(uploadImage.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error || 'Image upload failed.';
+      })
+      .addCase(uploadImage.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo;
+        state.successMessage = payload.message || 'Image uploaded successful!';
       });
   },
 });

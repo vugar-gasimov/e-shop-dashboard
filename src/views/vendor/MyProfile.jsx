@@ -1,17 +1,29 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PiUserCirclePlus } from 'react-icons/pi';
 import { FadeLoader } from 'react-spinners';
 import { FaUserEdit } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { uploadImage } from '../../store/Reducers/authReducer';
+import { uploadImage, clearMessages } from '../../store/Reducers/authReducer';
+import toast from 'react-hot-toast';
 
 const MyProfile = () => {
   const dispatch = useDispatch();
-  const { userInfo } = useSelector((state) => state.auth);
+  const { userInfo, loader, successMessage, errorMessage } = useSelector(
+    (state) => state.auth
+  );
 
-  const image = true;
-  const loader = true;
   const status = 'active';
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
 
   const add_image = (e) => {
     if (e.target.files.length > 0) {
@@ -27,18 +39,18 @@ const MyProfile = () => {
         <div className='w-full md:w-6/12'>
           <div className='w-full p-4 bg-[#6a5fdf] rounded-md text-indigo-100'>
             <div className='flex justify-center items-center py-3'>
-              {image?.image ? (
+              {userInfo?.image ? (
                 <label
                   htmlFor='img'
                   className='h-[150px] w-[200px] relative  cursor-pointer   '
                 >
                   <img
-                    src='http://localhost:3000/images/demo.jpg'
-                    alt="User's profile image."
+                    src={userInfo.image}
+                    alt="User's profile picture."
                     className='h-[150px] w-[200px]
                     rounded-lg object-cover overflow-hidden'
                   />
-                  {!loader && (
+                  {loader && (
                     <div className='bg-indigo-300 absolute left-0 top-0 w-full h-full opacity-70 flex justify-center items-center z-20 rounded-lg'>
                       <span>
                         <FadeLoader />
