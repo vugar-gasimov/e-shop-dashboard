@@ -187,6 +187,19 @@ export const authReducer = createSlice({
         state.loader = false;
         state.userInfo = payload.userInfo;
         state.successMessage = payload.message || 'Image uploaded successful!';
+      })
+      .addCase(addProfileInfo.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(addProfileInfo.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error || 'Shop information update failed.';
+      })
+      .addCase(addProfileInfo.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.userInfo = payload.userInfo;
+        state.successMessage =
+          payload.message || 'Shop information updated successfully.';
       });
   },
 });

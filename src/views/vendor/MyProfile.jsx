@@ -49,7 +49,6 @@ const MyProfile = () => {
     setState({
       ...state,
       [e.target.name]: e.target.value,
-      division: 'Division',
     });
   };
 
