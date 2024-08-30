@@ -1,40 +1,43 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Pagination from '../Pagination';
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import Search from '../components/Search';
+import {
+  getVendors,
+  clearMessages,
+} from './../../store/Reducers/vendorReducer';
 
 const VendorRequests = () => {
+  const dispatch = useDispatch();
+  const { loader, successMessage, errorMessage, vendors, totalVendors } =
+    useSelector((state) => state.vendors);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+
+  useEffect(() => {
+    dispatch(
+      getVendors({
+        perPage,
+        searchValue,
+        page: currentPage,
+      })
+    );
+  }, [dispatch, perPage, searchValue, currentPage]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3'>Vendor Requests</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
-        <div className='flex justify-between items-center'>
-          <select
-            onChange={(e) => setPerPage(parseInt(e.target.value))}
-            name=''
-            id=''
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
-          >
-            <option value='5' className=''>
-              5
-            </option>
-            <option value='10' className=''>
-              10
-            </option>
-            <option value='20' className=''>
-              20
-            </option>
-          </select>
-          <input
-            type='text'
-            placeholder='Search...'
-            className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
-          />
-        </div>
+        <Search
+          setPerPage={setPerPage}
+          setSearchValue={setSearchValue}
+          searchValue={searchValue}
+        />
         <div className='relative overflow-x-auto'>
           <table className='w-full text-sm text-left text-[#d0d2d6]  '>
             <thead className='text-sm text-[#d0d2d6] uppercase border-b border-slate-700'>
