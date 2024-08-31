@@ -65,30 +65,30 @@ const VendorRequests = () => {
               </tr>
             </thead>
             <tbody className=''>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {vendors.map((d, i) => (
                 <tr key={i} className='border-b border-indigo-200'>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    {d}
+                    {i + 1}
                   </td>
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    V.Gasimov
+                    {d.name}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    vuqar585@gmail.com
+                    {d.email}
                   </td>
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    <span>Inactive</span>
+                    <span>{d.payment}</span>
                   </td>
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
-                    <span>Pending</span>
+                    <span>{d.status}</span>
                   </td>
 
                   <td className='py-2 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
                       <Link
-                        to='/admin/dashboard/details/2'
+                        to={`/admin/dashboard/vendor/details/${d._id}`}
                         className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
                       >
                         <MdOutlineRemoveRedEye size={25} />

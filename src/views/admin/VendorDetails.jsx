@@ -1,15 +1,29 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { getVendor, clearMessages } from './../../store/Reducers/vendorReducer';
+import { useParams } from 'react-router-dom';
 
 const VendorDetails = () => {
+  const dispatch = useDispatch();
+  const { loader, successMessage, errorMessage, vendor } = useSelector(
+    (state) => state.vendors
+  );
+
+  const { vendorId } = useParams();
+
+  useEffect(() => {
+    dispatch(getVendor(vendorId));
+  }, [dispatch, vendorId]);
+
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3'>Vendor Details</h1>
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md'>
         <div className='w-full flex flex-wrap text-indigo-200'>
           <div className='w-3/12 flex justify-center items-center py-3'>
-            <div className=''>
+            <div className=' '>
               <img
-                className='w-full h-[230px] rounded-lg'
+                className='w-full h-[230px] rounded-lg object-cover shadow-md'
                 src='http://localhost:3000/images/demo.jpg'
                 alt="Vendor's image."
               />

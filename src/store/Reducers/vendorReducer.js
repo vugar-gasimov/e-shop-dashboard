@@ -1,6 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import api from '../../api/api';
 
+export const getVendor = createAsyncThunk(
+  'vendors/getVendor',
+  async (vendorId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/get-vendor/${vendorId}`, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get Vendor method.
+
 export const getVendors = createAsyncThunk(
   'vendors/getVendors',
   async (
@@ -22,13 +39,14 @@ export const getVendors = createAsyncThunk(
       );
     }
   }
-); // End of getCategories method.
+); // End of get Vendors method.
 
 const initialState = {
   successMessage: '',
   errorMessage: '',
   loader: false,
   textLoader: false,
+  vendor: '',
   vendors: [],
   totalVendors: 0,
 };
@@ -57,6 +75,18 @@ export const vendorReducer = createSlice({
         state.totalVendors = payload.totalVendors;
         state.successMessage = payload.message;
         state.vendors = payload.vendors;
+      })
+      .addCase(getVendor.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(getVendor.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(getVendor.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.vendor = payload.vendor;
       });
   },
 });
