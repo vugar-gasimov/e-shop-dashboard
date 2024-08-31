@@ -41,6 +41,23 @@ export const getVendors = createAsyncThunk(
   }
 ); // End of get Vendors method.
 
+export const updateVendorStatus = createAsyncThunk(
+  'vendors/updateVendorStatus',
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/update-vendor-status`, info, {
+        withCredentials: true,
+      });
+      console.log(data);
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of update Vendor Status method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -84,6 +101,18 @@ export const vendorReducer = createSlice({
         state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(getVendor.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.vendor = payload.vendor;
+      })
+      .addCase(updateVendorStatus.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(updateVendorStatus.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(updateVendorStatus.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
         state.vendor = payload.vendor;
