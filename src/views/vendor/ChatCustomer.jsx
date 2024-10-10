@@ -1,9 +1,23 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { MdOutlineClose, MdOutlineList } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { get_customers } from '../../store/Reducers/chatReducer';
+import { Link } from 'react-router-dom';
 
 const ChatCustomer = () => {
+  const dispatch = useDispatch();
+
+  const { userInfo } = useSelector((state) => state.auth || {});
+  const { customers } = useSelector((state) => state.vendor_chat || {});
+
   const [show, setShow] = useState(false);
   const vendorId = 65;
+
+  useEffect(() => {
+    if (userInfo?._id) {
+      dispatch(get_customers(userInfo._id));
+    }
+  }, [dispatch, userInfo?._id]);
 
   return (
     <div className='px-2 lg:px-7 py-5'>
@@ -24,57 +38,29 @@ const ChatCustomer = () => {
                   <MdOutlineClose />
                 </span>
               </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 cursor-pointer bg-indigo-400 rounded-lg `}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>V.Gasimov</h2>
+              {customers.map((customer, i) => (
+                <Link
+                  to={`/vendor/dashboard/chat-customer/${customer.fdId}`}
+                  key={i}
+                  className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 cursor-pointer bg-indigo-400 rounded-lg `}
+                >
+                  <div className='relative'>
+                    <img
+                      src='http://localhost:3001/images/admin.jpg'
+                      alt="Vendor's profile picture."
+                      className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
+                    />
+                    <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
                   </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 rounded-sm cursor-pointer`}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>S.Jhony</h2>
+                  <div className='flex justify-center items-start flex-col w-full'>
+                    <div className='flex justify-between items-center w-full'>
+                      <h2 className='text-base font-semibold'>
+                        {customer.name}
+                      </h2>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 rounded-sm cursor-pointer`}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>T.Bruce</h2>
-                  </div>
-                </div>
-              </div>
+                </Link>
+              ))}
             </div>
           </div>
           <div className='w-full md:w-[calc(100%-200px)] md:pl-4'>
