@@ -11,10 +11,51 @@ export const get_customers = createAsyncThunk(
 
       return fulfillWithValue(data);
     } catch (error) {
-      return rejectWithValue(error.response?.data);
+      return rejectWithValue(
+        error.response?.data || 'Failed to fetch customers'
+      );
     }
   }
-); // End of Add Profile Info method
+); // End of get customers chat messages method
+
+export const get_customer_message = createAsyncThunk(
+  'vendor_chat/get_customer_message',
+  async (customerId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(
+        `/chat/vendor/get-customer-message/${customerId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || 'Failed to fetch messages'
+      );
+    }
+  }
+); // End of get customer message method
+
+export const send_message_customer = createAsyncThunk(
+  'vendor_chat/send_message_customer',
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        `/chat/vendor/send-message-customer`,
+        info,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Failed to send message');
+    }
+  }
+); // End of send message to customer method
 
 export const chatReducer = createSlice({
   name: 'vendor_chat',
@@ -39,12 +80,36 @@ export const chatReducer = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(get_customers.fulfilled, (state, { payload }) => {
-      state.loader = false;
-      state.successMessage =
-        payload.message || 'Customers fetched successfully';
-      state.customers = payload.customers;
-    });
+    builder
+      .addCase(get_customers.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage =
+          payload.message || 'Customers fetched successfully';
+        state.customers = payload.customers;
+      })
+      .addCase(get_customer_message.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage =
+          payload.message || 'Customer message fetched successfully';
+        state.messages = payload.messages;
+        state.currentCustomer = payload.currentCustomer;
+      })
+      .addCase(send_message_customer.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message || 'Message posted successfully';
+        let tempFriends = state.customers;
+        let friendIndex = tempFriends.findIndex(
+          (f) => f.fdId === payload.newMessage.receiverId
+        );
+        while (friendIndex > 0) {
+          let temp = tempFriends[friendIndex];
+          tempFriends[friendIndex] = tempFriends[friendIndex - 1];
+          tempFriends[friendIndex - 1] = temp;
+          friendIndex--;
+        }
+        state.customers = tempFriends || [];
+        state.messages = [...state.messages, payload.newMessage] || [];
+      });
   },
 });
 
