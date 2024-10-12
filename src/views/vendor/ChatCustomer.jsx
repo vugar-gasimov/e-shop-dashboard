@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
+
+import toast from 'react-hot-toast';
 
 import { MdOutlineClose, MdOutlineList } from 'react-icons/md';
 
@@ -11,10 +13,12 @@ import {
   get_customer_message,
   get_customers,
   send_message_customer,
+  updateMessage,
 } from '../../store/Reducers/chatReducer';
 
 const ChatCustomer = () => {
   const dispatch = useDispatch();
+  const scrollRef = useRef();
 
   const { userInfo } = useSelector((state) => state.auth || {});
   const { customers, messages, currentCustomer, successMessage } = useSelector(
@@ -25,7 +29,6 @@ const ChatCustomer = () => {
   const vendorId = 65;
   const [text, setText] = useState('');
   const [receiverMessage, setReceiverMessage] = useState('');
-
   const { customerId } = useParams(userInfo._id);
 
   useEffect(() => {
@@ -56,16 +59,34 @@ const ChatCustomer = () => {
 
   useEffect(() => {
     if (successMessage) {
-      socket.emit('send_message', messages[messages.length - 1]);
+      socket.emit('send_vendor_message', messages[messages.length - 1]);
       dispatch(clearMessages());
     }
   }, [dispatch, messages, successMessage]);
 
   useEffect(() => {
-    socket.on('seller_message', (msg) => {
+    socket.on('customer_message', (msg) => {
       setReceiverMessage(msg);
     });
   }, []);
+
+  useEffect(() => {
+    if (receiverMessage) {
+      if (
+        customerId === receiverMessage.senderId &&
+        userInfo._id === receiverMessage.receiverId
+      ) {
+        dispatch(updateMessage(receiverMessage));
+      } else {
+        toast.success(`${receiverMessage.senderName} sent a message.`);
+        dispatch(clearMessages());
+      }
+    }
+  }, [receiverMessage, customerId, userInfo, dispatch]);
+
+  useEffect(() => {
+    scrollRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
 
   return (
     <div className='px-2 lg:px-7 py-5'>
@@ -159,6 +180,7 @@ const ChatCustomer = () => {
                       // Customer message (left-aligned)
                       <div
                         key={i}
+                        ref={scrollRef}
                         className='w-full flex justify-start items-center'
                       >
                         <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
@@ -178,6 +200,7 @@ const ChatCustomer = () => {
                       // Vendor message (right-aligned)
                       <div
                         key={i}
+                        ref={scrollRef}
                         className='w-full flex justify-end items-center'
                       >
                         <div className='flex justify-start items-start gap-2 md:px-3 py-2 max-w-full lg:max-w-[85%]'>
