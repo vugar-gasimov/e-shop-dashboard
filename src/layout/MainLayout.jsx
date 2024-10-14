@@ -1,12 +1,19 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Outlet } from 'react-router-dom';
+
 import Header from './Header';
 import Sidebar from './Sidebar';
+
 import { socket } from '../utils/utils';
-import { useSelector } from 'react-redux';
+
+import { updateCustomers, updateVendors } from '../store/Reducers/chatReducer';
 
 const MainLayout = () => {
+  const dispatch = useDispatch();
+
   const { userInfo } = useSelector((state) => state.auth || {});
+  const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
     if (userInfo && userInfo.role === 'vendor') {
@@ -16,7 +23,14 @@ const MainLayout = () => {
     }
   }, [userInfo]);
 
-  const [showSidebar, setShowSidebar] = useState(false);
+  useEffect(() => {
+    socket.on('activeVendor', (vendors) => {
+      dispatch(updateVendors(vendors));
+    });
+    socket.on('activeCustomer', (customers) => {
+      dispatch(updateCustomers(customers));
+    });
+  }, [dispatch]);
 
   return (
     <div className='bg-[#cdcae9] w-full min-h-screen'>

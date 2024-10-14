@@ -1,9 +1,21 @@
 import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { MdOutlineClose, MdOutlineList } from 'react-icons/md';
 
+import { get_vendors } from '../../store/Reducers/chatReducer';
+
 const LiveChat = () => {
+  const dispatch = useDispatch();
+
   const [show, setShow] = useState(false);
   const vendorId = 65;
+  const { vendors, activeVendor } = useSelector((state) => state.vendor_chat);
+
+  useEffect(() => {
+    dispatch(get_vendors());
+  }, [dispatch]);
 
   return (
     <div className='px-2 lg:px-7 py-5'>
@@ -24,57 +36,47 @@ const LiveChat = () => {
                   <MdOutlineClose />
                 </span>
               </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 cursor-pointer bg-indigo-400 rounded-lg `}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>V.Gasimov</h2>
+              {vendors.length > 0 ? (
+                vendors.map((vendor, i) => (
+                  <div
+                    key={i}
+                    className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 cursor-pointer bg-indigo-400 rounded-lg`}
+                  >
+                    <div className='relative'>
+                      <img
+                        src={
+                          vendor.image
+                            ? vendor.image
+                            : 'http://localhost:3000/images/admin.jpg'
+                        }
+                        alt={`Profile pict of ${vendor.name}`}
+                        className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
+                        onError={(e) => {
+                          // Fallback to a default image in case the image URL is broken
+                          e.target.src =
+                            'http://localhost:3001/images/admin.jpg';
+                        }}
+                      />
+                      {activeVendor.some(
+                        (active) => active.vendorId === vendor._id
+                      ) && (
+                        <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
+                      )}
+                    </div>
+                    <div className='flex justify-center items-start flex-col w-full'>
+                      <div className='flex justify-between items-center w-full'>
+                        <h2 className='text-base font-semibold'>
+                          {vendor.name}
+                        </h2>
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 rounded-sm cursor-pointer`}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>S.Jhony</h2>
-                  </div>
-                </div>
-              </div>
-              <div
-                className={`h-[60px] flex justify-start gap-2 items-center text-indigo-100 px-2 py-2 rounded-sm cursor-pointer`}
-              >
-                <div className='relative'>
-                  <img
-                    src='http://localhost:3000/images/admin.jpg'
-                    alt="Vendor's profile picture."
-                    className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
-                  />
-                  <div className='w-[10px] h-[10px] bg-green-500 rounded-full absolute right-0 bottom-0'></div>
-                </div>
-                <div className='flex justify-center items-start flex-col w-full'>
-                  <div className='flex justify-between items-center w-full'>
-                    <h2 className='text-base font-semibold'>T.Bruce</h2>
-                  </div>
-                </div>
-              </div>
+                ))
+              ) : (
+                <p className='text-indigo-100'>
+                  No vendors available at the moment.
+                </p>
+              )}
             </div>
           </div>
           <div className='w-full md:w-[calc(100%-200px)] md:pl-4'>

@@ -57,6 +57,21 @@ export const send_message_customer = createAsyncThunk(
   }
 ); // End of send message to customer method
 
+export const get_vendors = createAsyncThunk(
+  'vendor_chat/get_vendors',
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/admin/get-vendors`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data || 'Failed to get vendors');
+    }
+  }
+); // End of get vendors method
+
 export const chatReducer = createSlice({
   name: 'vendor_chat',
   initialState: {
@@ -80,6 +95,12 @@ export const chatReducer = createSlice({
     },
     updateMessage: (state, { payload }) => {
       state.messages = [...state.messages, payload];
+    },
+    updateVendors: (state, { payload }) => {
+      state.activeVendor = payload;
+    },
+    updateCustomers: (state, { payload }) => {
+      state.activeCustomer = payload;
     },
   },
   extraReducers: (builder) => {
@@ -112,9 +133,16 @@ export const chatReducer = createSlice({
         }
         state.customers = tempFriends || [];
         state.messages = [...state.messages, payload.newMessage] || [];
+      })
+      .addCase(get_vendors.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage =
+          payload.message || 'Vendors fetched successfully';
+        state.vendors = payload.vendors;
       });
   },
 });
 
-export const { clearMessages, updateMessage } = chatReducer.actions;
+export const { clearMessages, updateMessage, updateVendors, updateCustomers } =
+  chatReducer.actions;
 export default chatReducer.reducer;
