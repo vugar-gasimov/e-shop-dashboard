@@ -15,6 +15,7 @@ import {
   send_message_customer,
   updateMessage,
 } from '../../store/Reducers/chatReducer';
+import { FaUserPlus } from 'react-icons/fa';
 
 const ChatCustomer = () => {
   const dispatch = useDispatch();
@@ -220,6 +221,7 @@ const ChatCustomer = () => {
                   })
                 ) : (
                   <div className='w-full h-full flex justify-center items-center text-white gap-2 flex-col'>
+                    <FaUserPlus size={25} />
                     <p>Select Customer</p>
                   </div>
                 )}
@@ -227,16 +229,34 @@ const ChatCustomer = () => {
             </div>
             <form onSubmit={textHandler} className='flex gap-3'>
               <input
+                readOnly={!customerId}
+                disabled={!customerId}
+                type='text'
                 value={text}
                 onChange={(e) => setText(e.target.value)}
-                type='text'
-                placeholder='Input your message...'
-                className='w-full flex justify-between px-2 border border-slate-700 items-center py-[5px] focus:border-green-500 rounded-lg outline-none bg-indigo-300 text-indigo-700'
+                placeholder={
+                  customerId
+                    ? 'Input your message...'
+                    : 'Select a vendor to start typing...'
+                }
+                className={`w-full px-2 py-[5px] border items-center rounded-lg outline-none text-indigo-700 
+      ${
+        customerId
+          ? 'bg-indigo-300 border-slate-700 focus:border-green-500'
+          : 'bg-gray-300 border-gray-500 cursor-not-allowed'
+      }
+    `}
               />
               <button
                 type='submit'
-                className='bg-indigo-600
-                    hover:bg-indigo-400  hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-12 '
+                disabled={!customerId}
+                className={`py-2 px-12 text-white rounded-lg transition-all 
+      ${
+        customerId
+          ? 'bg-indigo-600 hover:bg-indigo-400 cursor-pointer  hover:shadow-indigo-400/40 hover:shadow-md'
+          : 'bg-gray-400 cursor-not-allowed'
+      }
+    `}
               >
                 Send
               </button>

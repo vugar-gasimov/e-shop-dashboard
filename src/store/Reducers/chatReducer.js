@@ -72,21 +72,55 @@ export const get_vendors = createAsyncThunk(
   }
 ); // End of get vendors method
 
+export const send_admin_message = createAsyncThunk(
+  'vendor_chat/send_admin_message',
+  async (info, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(`/chat/send-admin-message`, info, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || 'Failed to send admin message.'
+      );
+    }
+  }
+); // End of send admin message method
+
+export const get_admin_messages = createAsyncThunk(
+  'vendor_chat/get_admin_messages',
+  async (receiverId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/get-admin-messages/${receiverId}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || 'Failed to get admin messages.'
+      );
+    }
+  }
+); // End of get admin messages method
+
 export const chatReducer = createSlice({
   name: 'vendor_chat',
   initialState: {
-    successMessage: '',
-    errorMessage: '',
-    customers: [],
     messages: [],
+    errorMessage: '',
+    successMessage: '',
+    admin_vendor_messages: [],
     activeCustomer: [],
     activeVendor: [],
     activeAdmin: [],
-    friends: [],
-    vendor_admin_messages: [],
     currentVendor: {},
     currentCustomer: {},
+    friends: [],
     vendors: [],
+    customers: [],
   },
   reducers: {
     clearMessages: (state, _) => {
@@ -106,20 +140,17 @@ export const chatReducer = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(get_customers.fulfilled, (state, { payload }) => {
-        state.loader = false;
         state.successMessage =
           payload.message || 'Customers fetched successfully';
         state.customers = payload.customers;
       })
       .addCase(get_customer_message.fulfilled, (state, { payload }) => {
-        state.loader = false;
         state.successMessage =
           payload.message || 'Customer message fetched successfully';
         state.messages = payload.messages;
         state.currentCustomer = payload.currentCustomer;
       })
       .addCase(send_message_customer.fulfilled, (state, { payload }) => {
-        state.loader = false;
         state.successMessage = payload.message || 'Message posted successfully';
         let tempFriends = state.customers;
         let friendIndex = tempFriends.findIndex(
@@ -135,10 +166,23 @@ export const chatReducer = createSlice({
         state.messages = [...state.messages, payload.newMessage] || [];
       })
       .addCase(get_vendors.fulfilled, (state, { payload }) => {
-        state.loader = false;
         state.successMessage =
           payload.message || 'Vendors fetched successfully';
         state.vendors = payload.vendors;
+      })
+      .addCase(send_admin_message.fulfilled, (state, { payload }) => {
+        state.successMessage =
+          payload.message || 'Admin message sent successfully';
+        state.admin_vendor_messages = [
+          ...state.admin_vendor_messages,
+          payload.data,
+        ];
+      })
+      .addCase(get_admin_messages.fulfilled, (state, { payload }) => {
+        state.successMessage =
+          payload.message || 'Customer message fetched successfully';
+        state.admin_vendor_messages = payload.messages;
+        state.currentVendor = payload.currentVendor;
       });
   },
 });

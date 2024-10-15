@@ -60,6 +60,11 @@ export const adminRoutes = [
     role: 'admin',
   },
   {
+    path: 'admin/dashboard/live-chat/:vendorId',
+    element: <LiveChat />,
+    role: 'admin',
+  },
+  {
     path: 'admin/dashboard/order/details/:orderId',
     element: <OrderDetails />,
     role: 'admin',
