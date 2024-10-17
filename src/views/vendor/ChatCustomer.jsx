@@ -118,7 +118,7 @@ const ChatCustomer = () => {
                   >
                     <div className='relative'>
                       <img
-                        src='http://localhost:3001/images/admin.jpg'
+                        src='http://localhost:3001/images/demo.jpg'
                         alt="Vendor's profile picture."
                         className='w-[38px] h-[38px] border-indigo-300 border-2 max-w-[38px] p-[2px] rounded-full'
                       />
@@ -198,7 +198,6 @@ const ChatCustomer = () => {
                         </div>
                       </div>
                     ) : (
-                      // Vendor message (right-aligned)
                       <div
                         key={i}
                         ref={scrollRef}

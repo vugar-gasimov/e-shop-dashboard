@@ -106,6 +106,23 @@ export const get_admin_messages = createAsyncThunk(
   }
 ); // End of get admin messages method
 
+export const get_vendor_messages = createAsyncThunk(
+  'vendor_chat/get_vendor_messages',
+  async (receiverId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/chat/get-vendor-messages`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || 'Failed to get admin messages.'
+      );
+    }
+  }
+); // End of get vendor messages method
+
 export const chatReducer = createSlice({
   name: 'vendor_chat',
   initialState: {
@@ -135,6 +152,12 @@ export const chatReducer = createSlice({
     },
     updateCustomers: (state, { payload }) => {
       state.activeCustomer = payload;
+    },
+    updateAdminMessage: (state, { payload }) => {
+      state.admin_vendor_messages = [...state.admin_vendor_messages, payload];
+    },
+    updateVendorMessage: (state, { payload }) => {
+      state.admin_vendor_messages = [...state.admin_vendor_messages, payload];
     },
   },
   extraReducers: (builder) => {
@@ -183,10 +206,21 @@ export const chatReducer = createSlice({
           payload.message || 'Customer message fetched successfully';
         state.admin_vendor_messages = payload.messages;
         state.currentVendor = payload.currentVendor;
+      })
+      .addCase(get_vendor_messages.fulfilled, (state, { payload }) => {
+        state.successMessage =
+          payload.message || 'Customer message fetched successfully';
+        state.admin_vendor_messages = payload.messages;
       });
   },
 });
 
-export const { clearMessages, updateMessage, updateVendors, updateCustomers } =
-  chatReducer.actions;
+export const {
+  clearMessages,
+  updateMessage,
+  updateVendors,
+  updateCustomers,
+  updateAdminMessage,
+  updateVendorMessage,
+} = chatReducer.actions;
 export default chatReducer.reducer;
