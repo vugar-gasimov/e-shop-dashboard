@@ -58,6 +58,29 @@ export const updateVendorStatus = createAsyncThunk(
   }
 ); // End of update Vendor Status method.
 
+export const get_activeVendors = createAsyncThunk(
+  'vendors/get_activeVendors',
+  async (
+    { page, perPage, searchValue },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/get-active-vendors?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get active Vendors method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -116,6 +139,10 @@ export const vendorReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         state.vendor = payload.vendor;
+      })
+      .addCase(get_activeVendors.fulfilled, (state, { payload }) => {
+        state.vendors = payload.vendors;
+        state.totalVendors = payload.totalVendors;
       });
   },
 });

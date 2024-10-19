@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
-import { getNav } from '../navigation/index';
-import { MdExitToApp, MdOutlineList } from 'react-icons/md';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { MdExitToApp, MdOutlineList } from 'react-icons/md';
+
+import { getNav } from '../navigation/index';
+
+import { logout } from '../store/Reducers/authReducer';
 
 const LOGOUT_ICON = <MdExitToApp />;
 
 const Sidebar = ({ showSidebar, setShowSidebar }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { role } = useSelector((state) => state.auth);
-
   const { pathname } = useLocation();
   const [allNav, setAllNav] = useState([]);
 
@@ -68,6 +72,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             ))}
             <li>
               <button
+                onClick={() => dispatch(logout({ navigate, role }))}
                 className='text-[#030811] font-bold duration-200
                    px-[12px] py-[9px] rounded-lg flex justify-start items-center gap-[12px] hover:pl-4 transition-all w-full mb-1'
                 type='button'
