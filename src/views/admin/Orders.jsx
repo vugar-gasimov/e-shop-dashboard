@@ -77,7 +77,7 @@ const Orders = () => {
                 <div className=' text-[#d0d2d6] '>
                   <div className='flex justify-between items-start border-b border-slate-700'>
                     <div className='py-3 w-[25%] font-medium whitespace-nowrap'>
-                     #{order._id.slice(-5)}
+                      #{order._id.slice(-5)}
                     </div>
                     <div className='py-3 w-[13%] font-medium'>
                       ${order.price}
@@ -94,10 +94,16 @@ const Orders = () => {
                       </Link>
                     </div>
                     <div
-                     onClick={() => setShow(show === order._id ? null : order._id)}
+                      onClick={() =>
+                        setShow(show === order._id ? null : order._id)
+                      }
                       className='py-3 w-[8%] font-bold'
                     >
-                      <MdOutlineArrowDownward className={`transform transition-transform duration-300 ${show === order._id ? 'rotate-180' : ''}`} />
+                      <MdOutlineArrowDownward
+                        className={`transform transition-transform duration-300 ${
+                          show === order._id ? 'rotate-180' : ''
+                        }`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -115,7 +121,7 @@ const Orders = () => {
                       className='flex justify-start items-start border-b border-slate-700'
                     >
                       <div className='py-3 w-[25%] font-medium whitespace-nowrap pl-3'>
-                       #{sOrder._id.slice(-5)}
+                        #{sOrder._id.slice(-5)}
                       </div>
                       <div className='py-3 w-[13%] font-medium'>
                         ${sOrder.price}
@@ -135,8 +141,7 @@ const Orders = () => {
           </div>
         </div>
         {/* Pagination */}
-        {
-        totalOrders > perPage && (
+        {totalOrders > perPage && (
           <div className='w-full flex justify-end mt-4 bottom-3 right-4'>
             <Pagination
               pageNumber={currentPage}
@@ -146,8 +151,7 @@ const Orders = () => {
               showItem={4}
             />
           </div>
-        )
-        }
+        )}
       </div>
     </div>
   );
