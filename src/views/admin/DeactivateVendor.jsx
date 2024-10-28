@@ -1,13 +1,33 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import Pagination from '../Pagination';
+import { useDispatch, useSelector } from 'react-redux';
+
 import { MdOutlineRemoveRedEye } from 'react-icons/md';
 
+import Pagination from '../Pagination';
+
+import { get_deactiveVendors } from '../../store/Reducers/vendorReducer';
+
 const DeactivateVendor = () => {
+  const dispatch = useDispatch();
+
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
   const [show, setShow] = useState(false);
+
+  const { vendors = [], totalVendors } = useSelector(
+    (state) => state.vendors || {}
+  );
+
+  useEffect(() => {
+    const obj = {
+      perPage: parseInt(perPage),
+      page: parseInt(currentPage),
+      searchValue,
+    };
+    dispatch(get_deactiveVendors(obj));
+  }, [dispatch, searchValue, currentPage, perPage]);
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <h1 className='text-[20px] font-bold mb-3'>Deactivate Vendor</h1>
@@ -30,6 +50,8 @@ const DeactivateVendor = () => {
             </option>
           </select>
           <input
+            onChange={(e) => setSearchValue(e.target.value)}
+            value={searchValue}
             type='text'
             placeholder='Search...'
             className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-600 border border-slate-700 rounded-md text-[#d0d2d6]'
@@ -49,50 +71,74 @@ const DeactivateVendor = () => {
                   Name
                 </th>
                 <th scope='col' className='py-3 px-4'>
-                  Email
+                  Shop name
                 </th>
                 <th scope='col' className='py-3 px-4'>
                   Payment status
                 </th>
                 <th scope='col' className='py-3 px-4'>
+                  Email
+                </th>
+                <th scope='col' className='py-3 px-4'>
                   Status
                 </th>
-
+                <th scope='col' className='py-3 px-4'>
+                  District
+                </th>
                 <th scope='col' className='py-3 px-4'>
                   Action
                 </th>
               </tr>
             </thead>
             <tbody className=''>
-              {[1, 2, 3, 4, 5].map((d, i) => (
+              {vendors.map((vendor, i) => (
                 <tr key={i} className=''>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    {d}
+                    {i + 1}
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
                     <img
-                      src={`http://localhost:3000/images/category/${d}.jpg`}
-                      alt='Product image.'
-                      className='w-[45px] h-[45px] rounded-lg'
+                      src={
+                        vendor.image ||
+                        `http://localhost:3000/images/default-category.jpg`
+                      }
+                      alt={
+                        vendor.name
+                          ? `${vendor.name}'s product image`
+                          : 'Default product image'
+                      }
+                      className='w-[45px] h-[45px] rounded-lg object-cover'
+                      onError={(e) => {
+                        e.target.src =
+                          'http://localhost:3001/images/default-category.jpg';
+                      }}
                     />
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    V.Gasimov
+                    {vendor.name}
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    vuqar585@gmail.com
+                    {vendor.shopInfo?.shopName}
                   </td>
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    <span>Pending</span>
+                    <span>{vendor.payment}</span>
                   </td>
-
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                    <span>Deactivate</span>
+                    {vendor.email}
+                  </td>
+                  <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                    <span>{vendor.status}</span>
+                  </td>
+                  <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                    <span>{vendor.shopInfo?.district}</span>
                   </td>
 
                   <td className='py-1 px-4 font-medium whitespace-nowrap'>
                     <div className='flex justify-start items-center gap-4'>
-                      <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                      <Link
+                        to={`/admin/dashboard/vendor/details/${vendor._id}`}
+                        className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                      >
                         <MdOutlineRemoveRedEye size={25} />
                       </Link>
                     </div>

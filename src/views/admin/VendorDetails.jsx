@@ -156,7 +156,7 @@ const VendorDetails = () => {
               >
                 <option value=''>--Select Status--</option>
                 <option value='active'>Active</option>
-                <option value='deactivate'>Deactivate</option>
+                <option value='deactivated'>Deactivate</option>
               </select>
               <button
                 type='submit'

@@ -81,6 +81,29 @@ export const get_activeVendors = createAsyncThunk(
   }
 ); // End of get active Vendors method.
 
+export const get_deactiveVendors = createAsyncThunk(
+  'vendors/get_deactiveVendors',
+  async (
+    { page, perPage, searchValue },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/get-deactive-vendors?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get deactive Vendors method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -141,6 +164,10 @@ export const vendorReducer = createSlice({
         state.vendor = payload.vendor;
       })
       .addCase(get_activeVendors.fulfilled, (state, { payload }) => {
+        state.vendors = payload.vendors;
+        state.totalVendors = payload.totalVendors;
+      })
+      .addCase(get_deactiveVendors.fulfilled, (state, { payload }) => {
         state.vendors = payload.vendors;
         state.totalVendors = payload.totalVendors;
       });
