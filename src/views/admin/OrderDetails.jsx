@@ -1,18 +1,50 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
 
-import { get_admin_order } from '../../store/Reducers/orderReducer';
+import toast from 'react-hot-toast';
+
+import {
+  adminUpdateOrderStatus,
+  clearMessages,
+  get_admin_order,
+} from '../../store/Reducers/orderReducer';
 
 const OrderDetails = () => {
   const dispatch = useDispatch();
   const { orderId } = useParams();
 
-  const { order } = useSelector((state) => state.order || {});
+  const [status, setStatus] = useState('');
+
+  const { order, successMessage, errorMessage } = useSelector(
+    (state) => state.order || {}
+  );
+
+  useEffect(() => {
+    setStatus(order?.delivery_status);
+  }, [order]);
 
   useEffect(() => {
     dispatch(get_admin_order(orderId));
   }, [dispatch, orderId]);
+
+  const statusHandler = (e) => {
+    dispatch(
+      adminUpdateOrderStatus({ orderId, info: { status: e.target.value } })
+    );
+    setStatus(e.target.value);
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -20,15 +52,17 @@ const OrderDetails = () => {
       <div className='w-full p-4 bg-[#6a5fdf] rounded-md '>
         <div className='flex justify-between items-center p-4'>
           <select
+            onChange={statusHandler}
+            value={status}
             name=''
             id=''
             className='px-4 py-2 focus:border-indigo-500 outline-none bg-indigo-300 border border-[#6a5fdf]  rounded-lg text-indigo-700'
           >
-            <option value=''>pending</option>
-            <option value=''>processing</option>
-            <option value=''>warehouse</option>
-            <option value=''>placed</option>
-            <option value=''>cancelled</option>
+            <option value='pending'>pending</option>
+            <option value='processing'>processing</option>
+            <option value='warehouse'>warehouse</option>
+            <option value='placed'>placed</option>
+            <option value='cancelled'>cancelled</option>
           </select>
         </div>
         <div className='p-4'>
@@ -112,48 +146,43 @@ const OrderDetails = () => {
             <div className='w-[70%]'>
               <div className='pl-3'>
                 <div className='mt-4 flex flex-col bg-indigo-400 rounded-lg p-3'>
-                  <div className='text-indigo-100 mt-2'>
-                    <div className='flex justify-start items-center gap-3'>
-                      <h2 className=''>Vendor 1 order: </h2>
-                      <span className=''>pending</span>
-                    </div>
-                    <div className='flex gap-3 text-md items-center mt-2'>
-                      <img
-                        src='http://localhost:3000/images/category/1.jpg'
-                        alt='Product image.'
-                        className='w-[50px] h-[50px] rounded-lg'
-                      />
-                      <div>
-                        <h3>Product name here</h3>
-                        <p>
-                          <span>Brand: </span>
-                          <span>Easy </span>
-                          <span className='text-lg'>Quantity: 3</span>
-                        </p>
+                  {order?.suborder?.map((o, i) => (
+                    <div key={i + 20} className='text-indigo-100 mt-2'>
+                      <div className='flex justify-start items-center gap-3'>
+                        <h2 className=''>Vendor {i + 1} order: </h2>
+                        <span className=''>{o.delivery_status}</span>
                       </div>
+                      {o.products?.map((p, i) => (
+                        <div
+                          key={i}
+                          className='flex gap-3 text-md items-center mt-2'
+                        >
+                          <img
+                            src={
+                              p.images[0] ||
+                              'http://localhost:3000/images/default-category.jpg'
+                            }
+                            alt={`${p.name || 'Product'} img`}
+                            onError={(e) => {
+                              e.target.src =
+                                'http://localhost:3001/images/default-category.jpg';
+                            }}
+                            className='w-[50px] h-[50px] rounded-lg object-cover'
+                          />
+                          <div>
+                            <h3>Name: {p.name}</h3>
+                            <p>
+                              <span>Brand: </span>
+                              <span>{p.brand} </span>
+                              <span className='text-lg'>
+                                Quantity: {p.quantity}
+                              </span>
+                            </p>
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  </div>
-                  <div className='text-indigo-100 mt-2'>
-                    <div className='flex justify-start items-center gap-3'>
-                      <h2 className=''>Vendor 1 order: </h2>
-                      <span className=''>pending</span>
-                    </div>
-                    <div className='flex gap-3 text-md items-center mt-2'>
-                      <img
-                        src='http://localhost:3000/images/category/1.jpg'
-                        alt='Product image.'
-                        className='w-[50px] h-[50px] rounded-lg'
-                      />
-                      <div>
-                        <h3>Product name here</h3>
-                        <p>
-                          <span>Brand: </span>
-                          <span>Easy </span>
-                          <span className='text-lg'>Quantity: 3</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
             </div>
