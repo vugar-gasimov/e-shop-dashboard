@@ -104,6 +104,17 @@ export const get_deactiveVendors = createAsyncThunk(
   }
 ); // End of get deactive Vendors method.
 
+export const create_stripe_connect_account = createAsyncThunk(
+  'vendors/create_stripe_connect_account',
+  async () => {
+    try {
+      const { data } = await api.get(`/payment/create-strip-connect-account`, {
+        withCredentials: true,
+      });
+    } catch (error) {}
+  }
+); // End of create stripe connect account method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',

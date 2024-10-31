@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 import {
-  // vendorUpdateOrderStatus,
   clearMessages,
   get_vendor_order,
+  vendorUpdateOrderStatus,
 } from '../../store/Reducers/orderReducer';
 
 const OrderDetails = () => {
@@ -29,9 +29,9 @@ const OrderDetails = () => {
   }, [dispatch, orderId]);
 
   const statusHandler = (e) => {
-    //  dispatch(
-    //    vendorUpdateOrderStatus({ orderId, info: { status: e.target.value } })
-    //  );
+    dispatch(
+      vendorUpdateOrderStatus({ orderId, info: { status: e.target.value } })
+    );
     setStatus(e.target.value);
   };
 
@@ -77,30 +77,8 @@ const OrderDetails = () => {
               <div className='pr-3 text-indigo-100 text-lg'>
                 <div className='flex flex-col gap-2'>
                   <h2 className='pb-2 text-lg font-semibold'>
-                    Deliver to: {order.shippingInfo?.name || 'N/A'}
+                    Deliver to: {order.shippingInfo || 'N/A'}
                   </h2>
-                  <div className='text-sm space-y-1'>
-                    <p>
-                      <span className='font-medium'>Address: </span>
-                      {order.shippingInfo?.address || 'N/A'}
-                    </p>
-                    <p>
-                      <span className='font-medium'>City: </span>
-                      {order.shippingInfo?.city || 'N/A'}
-                    </p>
-                    <p>
-                      <span className='font-medium'>Province: </span>
-                      {order.shippingInfo?.province || 'N/A'}
-                    </p>
-                    <p>
-                      <span className='font-medium'>Area: </span>
-                      {order.shippingInfo?.area || 'N/A'}
-                    </p>
-                    <p>
-                      <span className='font-medium'>Contact: </span>
-                      {order.shippingInfo?.phone || 'N/A'}
-                    </p>
-                  </div>
                 </div>
                 <div className='flex justify-start items-center gap-3'>
                   <h2>Payment Status</h2>
@@ -113,7 +91,10 @@ const OrderDetails = () => {
                   <div className='text-indigo-100 px-2'>
                     {order.products &&
                       order.products.map((product, index) => (
-                        <div className='flex gap-3 text-md items-center'>
+                        <div
+                          key={product.id || product._id || index}
+                          className='flex gap-3 text-md items-center'
+                        >
                           <img
                             src={
                               product.images[0] ||
@@ -139,44 +120,6 @@ const OrderDetails = () => {
                           </div>
                         </div>
                       ))}
-                  </div>
-                </div>
-                <div className='mt-4 flex flex-col gap-4 bg-indigo-400 px-2 py-1 rounded-lg'>
-                  <div className='text-indigo-100'>
-                    <div className='flex gap-3 text-md items-center'>
-                      <img
-                        src='http://localhost:3000/images/category/1.jpg'
-                        alt='Product image.'
-                        className='w-[50px] h-[50px] rounded-lg'
-                      />
-                      <div>
-                        <h3>Product name here</h3>
-                        <p>
-                          <span>Brand: </span>
-                          <span>Easy </span>
-                          <span className='text-lg'>Quantity: 3</span>
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div className='mt-4 flex flex-col gap-4 bg-indigo-400 px-2 py-1 rounded-lg'>
-                  <div className='text-indigo-100'>
-                    <div className='flex gap-3 text-md items-center'>
-                      <img
-                        src='http://localhost:3000/images/category/1.jpg'
-                        alt='Product image.'
-                        className='w-[50px] h-[50px] rounded-lg'
-                      />
-                      <div>
-                        <h3>Product name here</h3>
-                        <p>
-                          <span>Brand: </span>
-                          <span>Easy </span>
-                          <span className='text-lg'>Quantity: 3</span>
-                        </p>
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>

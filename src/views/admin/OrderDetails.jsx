@@ -112,7 +112,7 @@ const OrderDetails = () => {
                     {order.products &&
                       order.products.map((product, index) => (
                         <div
-                          key={index}
+                          key={product.id || product._id || index}
                           className='flex gap-3 text-md items-center'
                         >
                           <img
@@ -154,7 +154,7 @@ const OrderDetails = () => {
                       </div>
                       {o.products?.map((p, i) => (
                         <div
-                          key={i}
+                          key={p.id || p._id || i}
                           className='flex gap-3 text-md items-center mt-2'
                         >
                           <img

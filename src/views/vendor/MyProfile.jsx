@@ -1,15 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { PiUserCirclePlus } from 'react-icons/pi';
-import { FadeLoader, PropagateLoader } from 'react-spinners';
-import { FaUserEdit } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
+
+import { FaUserEdit } from 'react-icons/fa';
+import { FadeLoader, PropagateLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+import { PiUserCirclePlus } from 'react-icons/pi';
+
 import {
   uploadImage,
   clearMessages,
   addProfileInfo,
 } from '../../store/Reducers/authReducer';
-import toast from 'react-hot-toast';
 import { overrideStyle } from '../../utils/utils';
+import { create_stripe_connect_account } from '../../store/Reducers/vendorReducer';
 
 const MyProfile = () => {
   const [state, setState] = useState({
@@ -132,15 +135,22 @@ const MyProfile = () => {
                 <div className='flex gap-2'>
                   <span className=''>Payment Account:</span>
                   <p>
-                    {status === 'active' ? (
+                    {/* ========================================= */}
+                    {userInfo.payment === 'active' ? (
                       <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'>
                         {userInfo.payment}
                       </span>
                     ) : (
-                      <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'>
+                      <span
+                        onClick={() =>
+                          dispatch(create_stripe_connect_account())
+                        }
+                        className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'
+                      >
                         Activate
                       </span>
                     )}
+                    {/* ========================================= */}
                   </p>
                 </div>
               </div>

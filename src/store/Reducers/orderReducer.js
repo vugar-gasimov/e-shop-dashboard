@@ -102,6 +102,27 @@ export const get_vendor_order = createAsyncThunk(
   }
 ); // End of get vendor order method.
 
+export const vendorUpdateOrderStatus = createAsyncThunk(
+  'order/vendorUpdateOrderStatus',
+  async ({ orderId, info }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(
+        `/vendor/update/order-status/${orderId}`,
+        info,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of vendor update order status method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -144,6 +165,12 @@ export const orderReducer = createSlice({
       })
       .addCase(get_vendor_order.fulfilled, (state, { payload }) => {
         state.order = payload.order;
+        state.successMessage = payload.message;
+      })
+      .addCase(vendorUpdateOrderStatus.rejected, (state, { payload }) => {
+        state.errorMessage = payload.error;
+      })
+      .addCase(vendorUpdateOrderStatus.fulfilled, (state, { payload }) => {
         state.successMessage = payload.message;
       });
   },
