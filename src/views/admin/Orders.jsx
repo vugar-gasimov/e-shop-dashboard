@@ -2,11 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
+import { LuPackageSearch } from 'react-icons/lu';
 import { MdOutlineArrowDownward } from 'react-icons/md';
 
 import Pagination from '../Pagination';
 
-import { get_admin_orders } from './../../store/Reducers/orderReducer';
+import { get_admin_orders } from '../../store/Reducers/orderReducer';
 
 const Orders = () => {
   const dispatch = useDispatch();
@@ -71,7 +72,7 @@ const Orders = () => {
               </div>
             </div>
             {/* Order Item */}
-            {myOrders.map((order, index) => (
+            {myOrders.map((order) => (
               <React.Fragment key={order._id}>
                 {' '}
                 <div className=' text-[#d0d2d6] '>
@@ -89,8 +90,11 @@ const Orders = () => {
                       {order.delivery_status}
                     </div>
                     <div className='py-3 w-[18%] font-medium'>
-                      <Link to={`/admin/dashboard/order/details/${order._id}`}>
-                        View
+                      <Link
+                        to={`/admin/dashboard/order/details/${order._id}`}
+                        className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                      >
+                        <LuPackageSearch size={24} />
                       </Link>
                     </div>
                     <div

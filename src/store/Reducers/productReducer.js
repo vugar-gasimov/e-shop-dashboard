@@ -26,7 +26,7 @@ export const get_products = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/get-products?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/get-products?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }

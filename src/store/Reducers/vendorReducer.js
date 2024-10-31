@@ -26,7 +26,7 @@ export const getVendors = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/get-vendors?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/get-vendors?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }
@@ -66,7 +66,7 @@ export const get_activeVendors = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/get-active-vendors?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/get-active-vendors?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }
@@ -89,7 +89,7 @@ export const get_deactiveVendors = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/get-deactive-vendors?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/get-deactive-vendors?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }

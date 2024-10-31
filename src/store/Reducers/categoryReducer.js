@@ -29,7 +29,7 @@ export const getCategories = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/get-categories?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/get-categories?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }

@@ -9,7 +9,7 @@ export const get_admin_orders = createAsyncThunk(
   ) => {
     try {
       const { data } = await api.get(
-        `/admin/get-orders?page=${page}&&searchValue=${searchValue}&&perPage=${perPage}`,
+        `/admin/get-orders?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
         {
           withCredentials: true,
         }
@@ -62,6 +62,46 @@ export const adminUpdateOrderStatus = createAsyncThunk(
   }
 ); // End of admin update order status method.
 
+export const get_vendor_orders = createAsyncThunk(
+  'order/get_vendor_orders',
+  async (
+    { page, perPage, searchValue, vendorId },
+    { rejectWithValue, fulfillWithValue }
+  ) => {
+    try {
+      const { data } = await api.get(
+        `/vendor/get-orders/${vendorId}?page=${page}&searchValue=${searchValue}&perPage=${perPage}`,
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get vendor orders method.
+
+export const get_vendor_order = createAsyncThunk(
+  'order/get_vendor_order',
+  async (orderId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get(`/vendor/get-order/${orderId}`, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of get vendor order method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -95,6 +135,15 @@ export const orderReducer = createSlice({
         state.errorMessage = payload.error;
       })
       .addCase(adminUpdateOrderStatus.fulfilled, (state, { payload }) => {
+        state.successMessage = payload.message;
+      })
+      .addCase(get_vendor_orders.fulfilled, (state, { payload }) => {
+        state.myOrders = payload.orders;
+        state.totalOrders = payload.totalOrders;
+        // state.successMessage = payload.message;
+      })
+      .addCase(get_vendor_order.fulfilled, (state, { payload }) => {
+        state.order = payload.order;
         state.successMessage = payload.message;
       });
   },
