@@ -7,6 +7,7 @@ import { MdExitToApp, MdOutlineList } from 'react-icons/md';
 import { getNav } from '../navigation/index';
 
 import { logout } from '../store/Reducers/authReducer';
+import logo from '../assets/logo.png';
 
 const LOGOUT_ICON = <MdExitToApp />;
 
@@ -46,11 +47,7 @@ const Sidebar = ({ showSidebar, setShowSidebar }) => {
             </span>
           </div>
           <Link className='w-[180px] h-[50px]' to='/'>
-            <img
-              className='w-full h-full'
-              src='http://localhost:3000/images/logo.png'
-              alt='Website logo.'
-            />
+            <img className='w-full h-full' src={logo} alt='Website logo.' />
           </Link>
         </div>
         <div className='px-[16px]'>

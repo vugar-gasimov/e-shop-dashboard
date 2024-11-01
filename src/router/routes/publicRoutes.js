@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import Success from '../../views/Success';
 
 const Login = lazy(() => import('../../views/auth/Login'));
 const Register = lazy(() => import('../../views/auth/Register'));
@@ -26,6 +27,10 @@ const publicRoutes = [
   {
     path: '/unauthorized',
     element: <Unauthorized />,
+  },
+  {
+    path: '/success?',
+    element: <Success />,
   },
 ];
 export default publicRoutes;

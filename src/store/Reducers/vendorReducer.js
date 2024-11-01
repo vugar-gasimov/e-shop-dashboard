@@ -108,10 +108,15 @@ export const create_stripe_connect_account = createAsyncThunk(
   'vendors/create_stripe_connect_account',
   async () => {
     try {
-      const { data } = await api.get(`/payment/create-strip-connect-account`, {
+      const {
+        data: { url },
+      } = await api.get(`/payment/create-stripe-connect-account`, {
         withCredentials: true,
       });
-    } catch (error) {}
+      window.location.href = url;
+    } catch (error) {
+      console.log(error.response?.data || { error: 'An error occurred' });
+    }
   }
 ); // End of create stripe connect account method.
 
