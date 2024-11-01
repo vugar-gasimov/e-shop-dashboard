@@ -120,6 +120,27 @@ export const create_stripe_connect_account = createAsyncThunk(
   }
 ); // End of create stripe connect account method.
 
+export const active_stripe_connect_account = createAsyncThunk(
+  'vendors/active_stripe_connect_account',
+  async (activeCode, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.put(
+        `/payment/active-stripe-connect-account/${activeCode}`,
+        {},
+        {
+          withCredentials: true,
+        }
+      );
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of put active stripe connect account method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
