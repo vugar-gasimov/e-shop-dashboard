@@ -207,6 +207,20 @@ export const vendorReducer = createSlice({
       .addCase(get_deactiveVendors.fulfilled, (state, { payload }) => {
         state.vendors = payload.vendors;
         state.totalVendors = payload.totalVendors;
+      })
+      .addCase(active_stripe_connect_account.pending, (state, { payload }) => {
+        state.loader = true;
+      })
+      .addCase(
+        active_stripe_connect_account.fulfilled,
+        (state, { payload }) => {
+          state.loader = false;
+          state.successMessage = payload.message;
+        }
+      )
+      .addCase(active_stripe_connect_account.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.message;
       });
   },
 });

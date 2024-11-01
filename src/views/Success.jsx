@@ -25,7 +25,7 @@ const Success = () => {
   }, [dispatch, activeCode]);
 
   const redirect = () => {
-    dispatch(clearMessages);
+    dispatch(clearMessages());
     navigate('/');
   };
 

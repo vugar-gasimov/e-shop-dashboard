@@ -135,9 +135,8 @@ const MyProfile = () => {
                 <div className='flex gap-2'>
                   <span className=''>Payment Account:</span>
                   <p>
-                    {/* ========================================= */}
                     {userInfo.payment === 'active' ? (
-                      <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 hover:text-indigo-600'>
+                      <span className='py-[6px] px-3 bg-indigo-300 text-orange-600 rounded-md text-sm cursor-pointer hover:shadow-lg hover:shadow-s/50 '>
                         {userInfo.payment}
                       </span>
                     ) : (
@@ -150,7 +149,6 @@ const MyProfile = () => {
                         Activate
                       </span>
                     )}
-                    {/* ========================================= */}
                   </p>
                 </div>
               </div>
