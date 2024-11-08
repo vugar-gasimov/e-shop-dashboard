@@ -12,7 +12,7 @@ import { updateCustomers, updateVendors } from '../store/Reducers/chatReducer';
 const MainLayout = () => {
   const dispatch = useDispatch();
 
-  const { userInfo } = useSelector((state) => state.auth || {});
+  const { userInfo } = useSelector((state) => state.auth);
   const [showSidebar, setShowSidebar] = useState(false);
 
   useEffect(() => {
@@ -24,11 +24,11 @@ const MainLayout = () => {
   }, [userInfo]);
 
   useEffect(() => {
-    socket.on('activeVendor', (vendors) => {
-      dispatch(updateVendors(vendors));
-    });
     socket.on('activeCustomer', (customers) => {
       dispatch(updateCustomers(customers));
+    });
+    socket.on('activeVendor', (vendors) => {
+      dispatch(updateVendors(vendors));
     });
   }, [dispatch]);
 

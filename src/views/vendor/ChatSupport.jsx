@@ -25,6 +25,10 @@ const ChatSupport = () => {
   } = useSelector((state) => state.vendor_chat);
   const { userInfo } = useSelector((state) => state.auth);
 
+  useEffect(() => {
+    dispatch(get_vendor_messages());
+  }, [dispatch]);
+
   const textHandler = (e) => {
     e.preventDefault();
 
@@ -38,10 +42,6 @@ const ChatSupport = () => {
     );
     setText('');
   };
-
-  useEffect(() => {
-    dispatch(get_vendor_messages());
-  }, [dispatch]);
 
   useEffect(() => {
     socket.on('received_admin_message', (msg) => {

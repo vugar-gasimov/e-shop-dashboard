@@ -1,6 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import { MdOutlineCurrencyExchange } from 'react-icons/md';
+import { useDispatch, useSelector } from 'react-redux';
+import { vendor_payment_details } from '../../store/Reducers/paymentReducer';
 
 function handleOnWheel({ deltaY }) {
   console.log('handleOnWheel', deltaY);
@@ -10,7 +12,10 @@ const outerElementType = forwardRef((props, ref) => (
 ));
 
 const Payments = () => {
-  const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const dispatch = useDispatch();
+
+  // const { userInfo } = useSelector((state) => state.auth || {});
+  const { userInfo } = useSelector((state) => state.auth);
 
   const Row = ({ index, style }) => {
     return (
@@ -33,6 +38,11 @@ const Payments = () => {
       </div>
     );
   };
+
+  useEffect(() => {
+    dispatch(vendor_payment_details(userInfo._id));
+  }, [dispatch, userInfo]);
+
   return (
     <div className='px-2 md:px-7 py-5'>
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7 mb-5'>
