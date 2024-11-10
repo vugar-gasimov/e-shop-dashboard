@@ -30,7 +30,7 @@ const ChatCustomer = () => {
   const vendorId = 65;
   const [text, setText] = useState('');
   const [receiverMessage, setReceiverMessage] = useState('');
-  const { customerId } = useParams(userInfo._id);
+  const { customerId } = useParams();
 
   useEffect(() => {
     if (userInfo?._id) {
@@ -46,16 +46,19 @@ const ChatCustomer = () => {
 
   const textHandler = (e) => {
     e.preventDefault();
-
-    dispatch(
-      send_message_customer({
-        senderId: userInfo._id || '',
-        receiverId: customerId,
-        text,
-        name: userInfo?.shopInfo?.shopName,
-      })
-    );
-    setText('');
+    if (customerId && userInfo._id) {
+      dispatch(
+        send_message_customer({
+          senderId: userInfo._id || '',
+          receiverId: customerId,
+          text,
+          name: userInfo?.shopInfo?.shopName,
+        })
+      );
+      setText('');
+    } else {
+      console.error('Missing customerId or userInfo._id');
+    }
   };
 
   useEffect(() => {
