@@ -78,6 +78,27 @@ const Payments = () => {
       </div>
     );
   };
+  const Rows = ({ index, style }) => {
+    return (
+      <div style={style} className='flex text-sm'>
+        <div className='w-[25%] py-2 px-3 whitespace-nowrap text-indigo-200'>
+          {index + 1}
+        </div>
+        <div className='w-[25%] py-2 px-3 whitespace-nowrap text-indigo-200'>
+          {' '}
+          ${successWithdraws[index]?.amount}
+        </div>
+        <div className='w-[25%] py-2 px-3 whitespace-nowrap'>
+          <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm'>
+            {successWithdraws[index]?.status}
+          </span>
+        </div>
+        <div className='w-[25%] py-2 px-3 whitespace-nowrap text-indigo-200'>
+          {moment(successWithdraws[index]?.createdAt).format('LL')}
+        </div>
+      </div>
+    );
+  };
 
   useEffect(() => {
     dispatch(vendor_payment_details(userInfo._id));
@@ -217,11 +238,11 @@ const Payments = () => {
                   style={{ minWidth: '340px' }}
                   className='List'
                   height={350}
-                  itemCount={100}
+                  itemCount={successWithdraws.length}
                   itemSize={35}
                   outerElementType={outerElementType}
                 >
-                  {Row}
+                  {Rows}
                 </List>
               }
             </div>
