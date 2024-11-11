@@ -50,6 +50,24 @@ export const get_payment_request = createAsyncThunk(
   }
 ); // End of get payment request method
 
+export const confirm_payment_request = createAsyncThunk(
+  'payment/confirm_payment_request',
+  async (paymentId, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.post(
+        '/payment/confirm-request',
+        { paymentId },
+        {
+          withCredentials: true,
+        }
+      );
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+); // End of confirm payment request method
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -110,6 +128,21 @@ export const paymentReducer = createSlice({
         state.loader = false;
         state.successMessage = payload.message;
         state.pendingWithdraws = payload.withdrawalRequest;
+      })
+      .addCase(confirm_payment_request.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(confirm_payment_request.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+      })
+      .addCase(confirm_payment_request.rejected, (state, { payload }) => {
+        const temp = state.pendingWithdraws.filter(
+          (r) => r._id !== payload.payment._id
+        );
+        state.loader = false;
+        state.errorMessage = payload.message;
+        state.pendingWithdraws = temp;
       });
   },
 });

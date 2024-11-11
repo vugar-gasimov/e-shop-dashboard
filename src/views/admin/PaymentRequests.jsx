@@ -1,8 +1,13 @@
-import React, { forwardRef, useEffect } from 'react';
+import React, { forwardRef, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList as List } from 'react-window';
-import { get_payment_request } from '../../store/Reducers/paymentReducer';
+import {
+  clearMessages,
+  confirm_payment_request,
+  get_payment_request,
+} from '../../store/Reducers/paymentReducer';
 import moment from 'moment';
+import toast from 'react-hot-toast';
 
 function handleOnWheel({ deltaY }) {
   console.log('handleOnWheel', deltaY);
@@ -14,11 +19,30 @@ const outerElementType = forwardRef((props, ref) => (
 const PaymentRequests = () => {
   const dispatch = useDispatch();
 
-  const { pendingWithdraws } = useSelector((state) => state.payment || {});
+  const { loader, pendingWithdraws, successMessage, errorMessage } =
+    useSelector((state) => state.payment || {});
+
+  const [paymentId, setPaymentId] = useState('');
 
   useEffect(() => {
     dispatch(get_payment_request());
   }, [dispatch]);
+
+  const confirm_request = (id) => {
+    setPaymentId(id);
+    dispatch(confirm_payment_request(id));
+  };
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [successMessage, errorMessage, dispatch]);
 
   const Row = ({ index, style }) => {
     return (
@@ -40,11 +64,15 @@ const PaymentRequests = () => {
         </div>
         <div className='w-[25%] py-0 px-3  whitespace-nowrap'>
           <button
+            disabled={loader}
+            onClick={() => confirm_request(pendingWithdraws[index]?._id)}
             type='button'
             className='bg-indigo-600
                     hover:bg-indigo-400hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer text-indigo-200 rounded-lg py-[6px] px-3 '
           >
-            Confirm
+            {loader && paymentId === pendingWithdraws[index]?._id
+              ? 'Loading..'
+              : 'Confirm'}
           </button>
         </div>
       </div>
