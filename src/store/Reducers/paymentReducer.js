@@ -36,6 +36,20 @@ export const send_withdrawal_request = createAsyncThunk(
   }
 ); // End of send withdrawal request method
 
+export const get_payment_request = createAsyncThunk(
+  'payment/get_payment_request',
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get('/payment/get-request', {
+        withCredentials: true,
+      });
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+); // End of get payment request method
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -91,6 +105,11 @@ export const paymentReducer = createSlice({
       .addCase(send_withdrawal_request.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.message;
+      })
+      .addCase(get_payment_request.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        state.pendingWithdraws = payload.withdrawalRequest;
       });
   },
 });

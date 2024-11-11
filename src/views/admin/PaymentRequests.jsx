@@ -1,5 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { FixedSizeList as List } from 'react-window';
+import { get_payment_request } from '../../store/Reducers/paymentReducer';
+import moment from 'moment';
 
 function handleOnWheel({ deltaY }) {
   console.log('handleOnWheel', deltaY);
@@ -9,7 +12,13 @@ const outerElementType = forwardRef((props, ref) => (
 ));
 
 const PaymentRequests = () => {
-  const array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const dispatch = useDispatch();
+
+  const { pendingWithdraws } = useSelector((state) => state.payment || {});
+
+  useEffect(() => {
+    dispatch(get_payment_request());
+  }, [dispatch]);
 
   const Row = ({ index, style }) => {
     return (
@@ -19,15 +28,15 @@ const PaymentRequests = () => {
         </div>
         <div className='w-[25%] py-2 px-3 whitespace-nowrap text-indigo-200'>
           {' '}
-          $350
+          ${pendingWithdraws[index]?.amount}
         </div>
         <div className='w-[25%] py-2 px-3 whitespace-nowrap'>
           <span className='py-[6px] px-3 bg-indigo-300 text-indigo-800 rounded-md text-sm'>
-            Pending
+            {pendingWithdraws[index]?.status}
           </span>
         </div>
         <div className='w-[25%] py-2 px-3 whitespace-nowrap text-indigo-200'>
-          15 Aug 2024
+          {moment(pendingWithdraws[index]?.createdAt).format('LL')}
         </div>
         <div className='w-[25%] py-0 px-3  whitespace-nowrap'>
           <button
@@ -71,7 +80,7 @@ const PaymentRequests = () => {
                 style={{ minWidth: '340px' }}
                 className='List'
                 height={350}
-                itemCount={100}
+                itemCount={pendingWithdraws.length}
                 itemSize={35}
                 outerElementType={outerElementType}
               >
