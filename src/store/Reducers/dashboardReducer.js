@@ -14,7 +14,22 @@ export const get_admin_dashboard = createAsyncThunk(
       return rejectWithValue(error.response?.data);
     }
   }
-);
+); // End of get admin dashboard method
+
+export const get_vendor_dashboard = createAsyncThunk(
+  'dashboard/get_vendor_dashboard',
+  async (_, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const { data } = await api.get('/vendor/get-dashboard', {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(error.response?.data);
+    }
+  }
+); // End of get vendor dashboard method
 
 const initialState = {
   successMessage: '',
@@ -43,11 +58,6 @@ export const dashboardReducer = createSlice({
       .addCase(get_admin_dashboard.pending, (state) => {
         state.loader = true;
       })
-      .addCase(get_admin_dashboard.rejected, (state, { payload }) => {
-        state.loader = false;
-        state.errorMessage =
-          payload.message || 'Failed to fetch admin dashboard data.';
-      })
       .addCase(get_admin_dashboard.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage =
@@ -58,7 +68,32 @@ export const dashboardReducer = createSlice({
         state.totalVendors = payload.totalVendors;
         state.recentMessages = payload.chatMessages;
         state.recentOrders = payload.recentOrders;
-      });
+      })
+      .addCase(get_admin_dashboard.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage =
+          payload.message || 'Failed to fetch admin dashboard data.';
+      }) // End of admin dashboard
+
+      .addCase(get_vendor_dashboard.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(get_vendor_dashboard.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage =
+          payload.message || 'Vendor dashboard data fetched successful!';
+        state.totalSales = payload.totalSales;
+        state.totalProducts = payload.totalProducts;
+        state.totalOrders = payload.totalOrders;
+        state.recentOrders = payload.recentOrders;
+        state.recentMessages = payload.recentMessages;
+        state.totalPendingOrders = payload.totalPendingOrders;
+      })
+      .addCase(get_vendor_dashboard.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage =
+          payload.message || 'Failed to fetch vendor dashboard data.';
+      }); // End of vendor dashboard
   },
 });
 

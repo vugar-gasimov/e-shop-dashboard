@@ -1,14 +1,56 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+
 import {
   MdOutlineCurrencyExchange,
   MdOutlinePendingActions,
   MdOutlineProductionQuantityLimits,
 } from 'react-icons/md';
 import { FaCartShopping } from 'react-icons/fa6';
+
 import Chart from 'react-apexcharts';
-import { Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import moment from 'moment';
+import {
+  get_vendor_dashboard,
+  clearMessages,
+} from '../../store/Reducers/dashboardReducer';
+import adminImg from '../../assets/admin.jpg';
+import vendorImg from '../../assets/seller.png';
+import customerImg from '../../assets/demo.jpg';
 
 const VendorDashboard = () => {
+  const dispatch = useDispatch();
+
+  const {
+    errorMessage,
+    successMessage,
+    totalSales,
+    totalProducts,
+    totalOrders,
+    recentOrders,
+    recentMessages,
+    totalPendingOrders,
+  } = useSelector((state) => state.dashboard);
+
+  const { userInfo } = useSelector((state) => state.auth);
+
+  useEffect(() => {
+    dispatch(get_vendor_dashboard());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (successMessage) {
+      toast.success(successMessage);
+      dispatch(clearMessages());
+    }
+    if (errorMessage) {
+      toast.error(errorMessage);
+      dispatch(clearMessages());
+    }
+  }, [dispatch, successMessage, errorMessage]);
+
   const state = {
     series: [
       {
@@ -102,7 +144,7 @@ const VendorDashboard = () => {
       <div className='w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-7'>
         <div className='flex justify-between items-center p-5 bg-[#6a5fdf] rounded-md gap-3'>
           <div className='flex flex-col justify-start text-indigo-100'>
-            <h2 className='text-3xl font-bold'>$36</h2>
+            <h2 className='text-3xl font-bold'>${totalSales}</h2>
             <span className='text-md font-medium'>Total Sale</span>
           </div>{' '}
           <div className='w-[40px] h-[47px] rounded-full bg-indigo-400 flex justify-center items-center text-xl'>
@@ -111,7 +153,7 @@ const VendorDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 bg-[#6a5fdf] rounded-md gap-3'>
           <div className='flex flex-col justify-start text-indigo-100'>
-            <h2 className='text-3xl font-bold'>$50</h2>
+            <h2 className='text-3xl font-bold'>{totalProducts}</h2>
             <span className='text-md font-medium'>Products</span>
           </div>{' '}
           <div className='w-[40px] h-[47px] rounded-full bg-indigo-400 flex justify-center items-center text-xl'>
@@ -123,7 +165,7 @@ const VendorDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 bg-[#6a5fdf] rounded-md gap-3'>
           <div className='flex flex-col justify-start text-indigo-100'>
-            <h2 className='text-3xl font-bold'>10</h2>
+            <h2 className='text-3xl font-bold'>{totalOrders}</h2>
             <span className='text-md font-medium'>Orders</span>
           </div>{' '}
           <div className='w-[40px] h-[47px] rounded-full bg-indigo-400 flex justify-center items-center text-xl'>
@@ -132,7 +174,7 @@ const VendorDashboard = () => {
         </div>
         <div className='flex justify-between items-center p-5 bg-[#6a5fdf] rounded-md gap-3'>
           <div className='flex flex-col justify-start text-indigo-100'>
-            <h2 className='text-3xl font-bold'>$54</h2>
+            <h2 className='text-3xl font-bold'>{totalPendingOrders}</h2>
             <span className='text-md font-medium'>Pending orders</span>
           </div>
           <div className='w-[40px] h-[47px] rounded-full bg-indigo-400 flex justify-center items-center text-xl'>
@@ -163,75 +205,50 @@ const VendorDashboard = () => {
             </div>
             <div className='flex flex-col gap-2 pt-6 text-[#d0d2d6'>
               <ol className='relative border-1 border-slate-600 ml-4'>
-                <li className='mb-3 ml-6 '>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-10'>
-                    <img
-                      src='http://localhost:3000/images/admin.jpg'
-                      alt='User image.'
-                      className='w-full rounded-full h-full'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='text-md font-normal'>Customer</Link>
-                      <time
-                        className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        dateTime=''
-                      >
-                        2 day ago
-                      </time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How are you?
-                    </div>
-                  </div>
-                </li>
-                <li className='mb-3 ml-6 '>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-10'>
-                    <img
-                      src='http://localhost:3000/images/admin.jpg'
-                      alt='User image.'
-                      className='w-full rounded-full h-full'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='text-md font-normal'>Admin</Link>
-                      <time
-                        className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        dateTime=''
-                      >
-                        2 day ago
-                      </time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How are you?
-                    </div>
-                  </div>
-                </li>
-                <li className='mb-3 ml-6 '>
-                  <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[6px] bg-[#4c7fe2] rounded-full z-10'>
-                    <img
-                      src='http://localhost:3000/images/admin.jpg'
-                      alt='User image.'
-                      className='w-full rounded-full h-full'
-                    />
-                  </div>
-                  <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
-                    <div className='flex justify-between items-center mb-2'>
-                      <Link className='text-md font-normal'>Vendor</Link>
-                      <time
-                        className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
-                        dateTime=''
-                      >
-                        2 day ago
-                      </time>
-                    </div>
-                    <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
-                      How are you?
-                    </div>
-                  </div>
-                </li>
+                {recentMessages.map((message, index) => {
+                  const isUserSender = message.senderId === userInfo._id;
+
+                  const userImageSrc =
+                    userInfo.image ||
+                    vendorImg ||
+                    'http://localhost:3000/images/seller.png' ||
+                    'http://localhost:3001/images/seller.png';
+                  const customerImageSrc =
+                    customerImg ||
+                    'http://localhost:3000/images/demo.jpg' ||
+                    'http://localhost:3001/images/demo.jpg';
+
+                  return (
+                    <li key={message._id || index} className='mb-3 ml-6 '>
+                      <div className='flex absolute -left-5 shadow-lg justify-center items-center w-10 h-10 p-[2px] bg-[#4c7fe2] rounded-full z-10'>
+                        {' '}
+                        <img
+                          src={isUserSender ? userImageSrc : customerImageSrc}
+                          alt={isUserSender ? 'My image' : 'Customer image'}
+                          className='w-full rounded-full h-full'
+                        />
+                      </div>
+                      <div className='p-3 bg-slate-800 rounded-lg border border-slate-600 shadow-sm'>
+                        <div className='flex justify-between items-center mb-2'>
+                          <Link className='text-md font-normal'>
+                            {message.senderName}
+                          </Link>
+                          <time
+                            className='mb-1 text-sm font-normal sm:order-last sm:mb-0'
+                            dateTime=''
+                          >
+                            {moment(message.createdAt)
+                              .startOf('hour')
+                              .fromNow()}
+                          </time>
+                        </div>
+                        <div className='p-2 text-xs font-normal bg-slate-700 rounded-lg border border-slate-800'>
+                          {message.message}
+                        </div>
+                      </div>
+                    </li>
+                  );
+                })}
               </ol>
             </div>
           </div>
@@ -266,22 +283,24 @@ const VendorDashboard = () => {
               </tr>
             </thead>
             <tbody className=''>
-              {[1, 2, 3, 4, 5].map((d, i) => (
-                <tr key={i} className=''>
+              {recentOrders.map((data, index) => (
+                <tr key={data._id || index} className=''>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    #34344
+                    #{data._id || index}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    $344
+                    ${data.price}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    Pending
+                    {data.payment_status}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    Pending
+                    {data.delivery_status}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    <Link>View</Link>
+                    <Link to={`/vendor/dashboard/order/details/${data._id}`}>
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))}

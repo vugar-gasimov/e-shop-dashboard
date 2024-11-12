@@ -23,7 +23,6 @@ const AdminDashboard = () => {
   const dispatch = useDispatch();
 
   const {
-    loader,
     errorMessage,
     successMessage,
     totalSales,
@@ -283,22 +282,24 @@ const AdminDashboard = () => {
               </tr>
             </thead>
             <tbody className=''>
-              {[1, 2, 3, 4, 5].map((d, i) => (
-                <tr key={i} className=''>
+              {recentOrders.map((data, i) => (
+                <tr key={data._id || i} className=''>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    #34344
+                    #{data._id}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    $344
+                    ${data.price}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    Pending
+                    {data.payment_status}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    Pending
+                    {data.delivery_status}
                   </td>
                   <td className='py-3 px-4 font-medium whitespace-nowrap'>
-                    <Link>View</Link>
+                    <Link to={`/admin/dashboard/order/details/${data._id}`}>
+                      View
+                    </Link>
                   </td>
                 </tr>
               ))}
