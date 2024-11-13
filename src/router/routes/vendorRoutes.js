@@ -17,6 +17,7 @@ const ChatSupport = lazy(() => import('../../views/vendor/ChatSupport'));
 const MyProfile = lazy(() => import('../../views/vendor/MyProfile'));
 const Pending = lazy(() => import('../../views/Pending'));
 const Deactive = lazy(() => import('../../views/Deactive'));
+const AddBanner = lazy(() => import('../../views/vendor/AddBanner'));
 
 export const vendorRoutes = [
   {
@@ -100,5 +101,11 @@ export const vendorRoutes = [
     element: <MyProfile />,
     role: 'vendor',
     visibility: ['active', 'deactive', 'pending'],
+  },
+  {
+    path: '/vendor/dashboard/add-banner/:productId',
+    element: <AddBanner />,
+    role: 'vendor',
+    status: 'active',
   },
 ];

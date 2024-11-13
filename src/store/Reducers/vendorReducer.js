@@ -8,7 +8,7 @@ export const getVendor = createAsyncThunk(
       const { data } = await api.get(`/get-vendor/${vendorId}`, {
         withCredentials: true,
       });
-      console.log(data);
+
       return fulfillWithValue(data);
     } catch (error) {
       return rejectWithValue(

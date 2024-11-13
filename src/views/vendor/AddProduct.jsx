@@ -333,8 +333,12 @@ const AddProduct = () => {
               <button
                 disabled={loader ? true : false}
                 type='submit'
-                className='bg-indigo-600
-                    hover:bg-indigo-400 hover:shadow-indigo-400/40 hover:shadow-md cursor-pointer  text-white rounded-lg py-2 px-7 my-2'
+                className={`bg-indigo-600 text-white rounded-lg py-2 px-7 my-2
+    ${
+      loader
+        ? 'cursor-not-allowed pointer-events-none'
+        : 'hover:bg-indigo-400 hover:shadow-md hover:shadow-indigo-400/40 cursor-pointer'
+    }`}
               >
                 {loader ? (
                   <div

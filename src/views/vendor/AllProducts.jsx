@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from 'react';
-import Search from '../components/Search';
+import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Pagination from '../Pagination';
+import { PropagateLoader } from 'react-spinners';
+import toast from 'react-hot-toast';
+
 import { MdDeleteOutline, MdOutlineEditNote } from 'react-icons/md';
 import { LuPackageSearch } from 'react-icons/lu';
-import { useDispatch, useSelector } from 'react-redux';
+import { BsCardImage } from 'react-icons/bs';
+
+import Pagination from '../Pagination';
+import { overrideStyle } from '../../utils/utils';
+import Search from '../components/Search';
 import {
   clearMessages,
   get_products,
 } from '../../store/Reducers/productReducer';
-import { PropagateLoader } from 'react-spinners';
-import { overrideStyle } from '../../utils/utils';
-import toast from 'react-hot-toast';
 
 const AllProducts = () => {
   const dispatch = useDispatch();
@@ -150,6 +153,12 @@ const AllProducts = () => {
                       </Link>
                       <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
                         <MdDeleteOutline size={24} />
+                      </Link>
+                      <Link
+                        to={`/vendor/dashboard/add-banner/${d._id}`}
+                        className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                      >
+                        <BsCardImage size={24} />
                       </Link>
                     </div>
                   </td>
