@@ -1,33 +1,41 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import Pagination from '../Pagination';
+import { useDispatch, useSelector } from 'react-redux';
+import toast from 'react-hot-toast';
+import { PropagateLoader } from 'react-spinners';
+
 import {
   MdDeleteOutline,
   MdOutlineClose,
   MdOutlineEditNote,
   MdOutlineImage,
 } from 'react-icons/md';
-import { PropagateLoader } from 'react-spinners';
+
 import { overrideStyle } from '../../utils/utils';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  addCategory,
-  clearMessages,
-  getCategories,
-} from './../../store/Reducers/categoryReducer';
-import toast from 'react-hot-toast';
+import Pagination from '../Pagination';
 import Search from './../components/Search';
+
+import {
+  clearMessages,
+  addCategory,
+  getCategories,
+  editCategory,
+} from './../../store/Reducers/categoryReducer';
 
 const Category = () => {
   const dispatch = useDispatch();
+
   const { loader, textLoader, successMessage, errorMessage, categories } =
     useSelector((state) => state.category);
 
   const [currentPage, setCurrentPage] = useState(1);
   const [searchValue, setSearchValue] = useState('');
   const [perPage, setPerPage] = useState(5);
+
   const [show, setShow] = useState(false);
   const [showImage, setShowImage] = useState('');
+
+  const [edit, setEdit] = useState(false);
+  const [editId, setEditId] = useState('');
 
   const [state, setState] = useState({
     name: '',
@@ -44,9 +52,13 @@ const Category = () => {
       });
     }
   };
-  const add_category = (e) => {
+  const addOrEditCategory = (e) => {
     e.preventDefault();
-    dispatch(addCategory(state));
+    if (edit) {
+      dispatch(editCategory({ id: editId, ...state }));
+    } else {
+      dispatch(addCategory(state));
+    }
   };
 
   useEffect(() => {
@@ -73,6 +85,17 @@ const Category = () => {
     };
     dispatch(getCategories(obj));
   }, [dispatch, currentPage, searchValue, perPage]);
+
+  const editHandler = (category) => {
+    setState({
+      name: category.name,
+      image: category.image,
+    });
+    setShowImage(category.image);
+    setEditId(category._id);
+    setEdit(true);
+    setShow(true);
+  };
 
   return (
     <div className='px-2 lg:px-7 pt-5'>
@@ -148,12 +171,18 @@ const Category = () => {
 
                         <td className='py-1 px-4 font-medium whitespace-nowrap'>
                           <div className='flex justify-start items-center gap-4'>
-                            <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                            <button
+                              onClick={() => editHandler(d)}
+                              className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                            >
                               <MdOutlineEditNote size={24} />
-                            </Link>
-                            <Link className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'>
+                            </button>
+                            <button
+                              // onClick={() => deleteHandler(d)}
+                              className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                            >
                               <MdDeleteOutline size={24} />
-                            </Link>
+                            </button>
                           </div>
                         </td>
                       </tr>
@@ -182,7 +211,7 @@ const Category = () => {
             <div className='bg-[#6a5fdf] h-screen lg:h-auto px-3 py-2 lg:rounded-md text-[#d0d2d6]'>
               <div className='flex justify-between items-center mb-4'>
                 <h2 className='text-[#d0d2d6] font-semibold text-xl mb-4 w-full text-center'>
-                  Add category
+                  {edit ? 'Edit Category' : 'Add Category'}
                 </h2>
                 <div
                   onClick={() => setShow(false)}
@@ -192,7 +221,7 @@ const Category = () => {
                 </div>
               </div>
 
-              <form onSubmit={add_category} className=''>
+              <form onSubmit={addOrEditCategory}>
                 <div className='flex flex-col w-full gap-1 mb-3'>
                   <label htmlFor='name'>Category name</label>
                   <input
@@ -246,8 +275,10 @@ const Category = () => {
                           color='#D1D5DB'
                           cssOverride={overrideStyle}
                         />
+                      ) : edit ? (
+                        'Edit Category'
                       ) : (
-                        'Add category'
+                        'Add Category'
                       )}
                     </button>
                   </div>

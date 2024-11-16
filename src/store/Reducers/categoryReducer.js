@@ -44,6 +44,28 @@ export const getCategories = createAsyncThunk(
   }
 ); // End of getCategories method.
 
+export const editCategory = createAsyncThunk(
+  'category/editCategory',
+  async ({ id, name, image }, { rejectWithValue, fulfillWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append('name', name);
+      if (image) {
+        formData.append('image', image);
+      }
+      const { data } = await api.put(`/edit/category/${id}`, formData, {
+        withCredentials: true,
+      });
+
+      return fulfillWithValue(data);
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data || { error: 'An error occurred' }
+      );
+    }
+  }
+); // End of edit category by id method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
