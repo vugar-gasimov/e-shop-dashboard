@@ -66,6 +66,22 @@ export const editCategory = createAsyncThunk(
   }
 ); // End of edit category by id method.
 
+export const deleteCategory = createAsyncThunk(
+  'category/deleteCategory',
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await api.delete(`/delete/category/${id}`);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || {
+          error: 'An error occurred while deleting a category.',
+        }
+      );
+    }
+  }
+); // End of edit category by id method.
+
 const initialState = {
   successMessage: '',
   errorMessage: '',
@@ -86,30 +102,47 @@ export const categoryReducer = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(addCategory.pending, (state, { payload }) => {
+      .addCase(addCategory.pending, (state) => {
         state.loader = true;
-      })
-      .addCase(addCategory.rejected, (state, { payload }) => {
-        state.loader = false;
-        state.errorMessage = payload.error || 'An error occurred';
       })
       .addCase(addCategory.fulfilled, (state, { payload }) => {
         state.loader = false;
         state.successMessage = payload.message;
         state.categories = [...state.categories, payload.categories];
       })
-      .addCase(getCategories.pending, (state, { payload }) => {
-        state.textLoader = true;
-      })
-      .addCase(getCategories.rejected, (state, { payload }) => {
-        state.textLoader = false;
+      .addCase(addCategory.rejected, (state, { payload }) => {
+        state.loader = false;
         state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(getCategories.pending, (state) => {
+        state.textLoader = true;
       })
       .addCase(getCategories.fulfilled, (state, { payload }) => {
         state.textLoader = false;
         state.totalCategories = payload.totalCategories;
         state.successMessage = payload.message;
         state.categories = payload.categories;
+      })
+      .addCase(getCategories.rejected, (state, { payload }) => {
+        state.textLoader = false;
+        state.errorMessage = payload.error || 'An error occurred';
+      })
+      .addCase(editCategory.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(editCategory.fulfilled, (state, { payload }) => {
+        state.loader = false;
+        state.successMessage = payload.message;
+        const index = state.categories.findIndex(
+          (category) => category._id === payload.category._id
+        );
+        if (index !== -1) {
+          state.categories[index] = payload.category;
+        }
+      })
+      .addCase(editCategory.rejected, (state, { payload }) => {
+        state.loader = false;
+        state.errorMessage = payload.message || 'An error occurred';
       });
   },
 });

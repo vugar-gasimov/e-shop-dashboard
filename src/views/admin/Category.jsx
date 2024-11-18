@@ -19,6 +19,7 @@ import {
   addCategory,
   getCategories,
   editCategory,
+  deleteCategory,
 } from './../../store/Reducers/categoryReducer';
 
 const Category = () => {
@@ -50,6 +51,8 @@ const Category = () => {
         ...state,
         image: files[0],
       });
+    } else {
+      toast.error('Please select a valid image file');
     }
   };
   const addOrEditCategory = (e) => {
@@ -64,13 +67,17 @@ const Category = () => {
   useEffect(() => {
     if (successMessage) {
       toast.success(successMessage);
+
       dispatch(clearMessages());
       setState({
         name: '',
         image: '',
       });
       setShowImage('');
+      setEdit(false);
+      setEditId(null);
     }
+
     if (errorMessage) {
       toast.error(errorMessage);
       dispatch(clearMessages());
@@ -97,6 +104,23 @@ const Category = () => {
     setShow(true);
   };
 
+  const deleteHandler = (id) => {
+    if (window.confirm('Are you sure you want to delete category?')) {
+      console.log('Delete category id', id);
+      dispatch(deleteCategory(id));
+    }
+  };
+
+  useEffect(() => {
+    if (categories?.some((d) => !d || !d.image)) {
+      const obj = {
+        perPage: parseInt(perPage),
+        page: parseInt(currentPage),
+        searchValue,
+      };
+      dispatch(getCategories(obj));
+    }
+  }, [categories, dispatch, perPage, currentPage, searchValue]);
   return (
     <div className='px-2 lg:px-7 pt-5'>
       <div className='flex lg:hidden justify-between items-center mb-5 p-4 bg-[#6a5fdf] rounded-md'>
@@ -149,44 +173,54 @@ const Category = () => {
                       </td>
                     </tr>
                   ) : (
-                    categories.map((d, i) => (
-                      <tr key={i} className=''>
-                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                          {i + 1}
-                        </td>
-                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                          {d.image ? (
-                            <img
-                              src={d.image}
-                              alt={`Product ${d.name}.`}
-                              className='w-[45px] h-[45px] rounded-lg object-cover'
-                            />
-                          ) : (
-                            <MdOutlineImage />
-                          )}
-                        </td>
-                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                          {d.name}
-                        </td>
+                    categories &&
+                    categories.map((d, i) =>
+                      d && d.image ? (
+                        <tr key={i} className=''>
+                          <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                            {i + 1}
+                          </td>
+                          <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                            {d.image ? (
+                              <img
+                                src={d.image}
+                                alt={`Product ${d.name}.`}
+                                className='w-[45px] h-[45px] rounded-lg object-cover'
+                              />
+                            ) : (
+                              <div className='w-[45px] h-[45px] bg-gray-300 flex items-center justify-center rounded-lg'>
+                                <MdOutlineImage
+                                  size={24}
+                                  className='text-gray-500'
+                                />
+                              </div>
+                            )}
+                          </td>
+                          <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                            {d.name || 'Unnamed Category'}
+                          </td>
 
-                        <td className='py-1 px-4 font-medium whitespace-nowrap'>
-                          <div className='flex justify-start items-center gap-4'>
-                            <button
-                              onClick={() => editHandler(d)}
-                              className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
-                            >
-                              <MdOutlineEditNote size={24} />
-                            </button>
-                            <button
-                              // onClick={() => deleteHandler(d)}
-                              className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
-                            >
-                              <MdDeleteOutline size={24} />
-                            </button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))
+                          <td className='py-1 px-4 font-medium whitespace-nowrap'>
+                            <div className='flex justify-start items-center gap-4'>
+                              <button
+                                onClick={() => editHandler(d)}
+                                className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                              >
+                                <MdOutlineEditNote size={24} />
+                              </button>
+                              <button
+                                onClick={() => deleteHandler(d._id)}
+                                className='p-[6px] rounded-lg bg-transparent hover:shadow-lg hover:shadow-s/50 hover:text-indigo-800'
+                              >
+                                <MdDeleteOutline size={24} />
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ) : (
+                        <p key={i}>Invalid category data</p>
+                      )
+                    )
                   )}
                 </tbody>
               </table>
