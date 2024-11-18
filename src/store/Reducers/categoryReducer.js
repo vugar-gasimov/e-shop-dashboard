@@ -143,6 +143,20 @@ export const categoryReducer = createSlice({
       .addCase(editCategory.rejected, (state, { payload }) => {
         state.loader = false;
         state.errorMessage = payload.message || 'An error occurred';
+      })
+      .addCase(deleteCategory.pending, (state) => {
+        state.loader = true;
+      })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.loader = false;
+        state.successMessage = action.payload.message;
+        state.categories = state.categories.filter(
+          (category) => category._id !== action.meta.arg
+        );
+      })
+      .addCase(deleteCategory.rejected, (state, action) => {
+        state.loader = false;
+        state.errorMessage = action.payload.message || 'An error occurred';
       });
   },
 });
